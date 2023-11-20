@@ -4,7 +4,7 @@
  Author      : Tofig Kareemov
  Version     :
  Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Description : Base64 Encryptor in C, Ansi-style
  ============================================================================
  */
 
