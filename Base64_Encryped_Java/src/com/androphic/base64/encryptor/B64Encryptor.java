@@ -158,6 +158,7 @@ public class B64Encryptor {
 			iDither = rotr16(iDither, 1) ^ iG;
 		}
 //.
+		out[k] = '\0';
 		return k;
 	}
 

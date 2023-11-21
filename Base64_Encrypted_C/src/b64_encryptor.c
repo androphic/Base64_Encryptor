@@ -221,6 +221,7 @@ unsigned int b64_decode(const unsigned char *in, unsigned int in_len,
 		iDither = rotr16(iDither, 1) ^ iG;
 	}
 //.
+	out[k] = '\0';
 	return k;
 }
 
