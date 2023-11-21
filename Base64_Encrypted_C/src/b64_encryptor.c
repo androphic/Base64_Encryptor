@@ -27,39 +27,54 @@ static inline unsigned int b64_int(unsigned int ch)
 // 43     Plus (+)    >>  62
 // 47     Slash (/)   >>  63
 // 61     Equal (=)   >>  64~
-	unsigned int iReturn = 0;
+//	unsigned int iReturn = 0;
+//	if (ch == 61) {
+//		return 64;
+//	} else if (ch == 43) {
+//		iReturn = 62;
+//	} else if (ch == 47) {
+//		iReturn = 63;
+//	} else if ((ch > 47) && (ch < 58)) {
+//		iReturn = ch + 4;
+//	} else if ((ch > 64) && (ch < 91)) {
+//		iReturn = ch - 'A';
+//	} else if ((ch > 96) && (ch < 123)) {
+//		iReturn = (ch - 'a') + 26;
+//	}
+//	return iReturn;
+
 	if (ch == 61) {
 		return 64;
 	} else if (ch == 43) {
-		iReturn = 62;
+		return 62;
 	} else if (ch == 47) {
-		iReturn = 63;
+		return 63;
 	} else if ((ch > 47) && (ch < 58)) {
-		iReturn = ch + 4;
+		return ch + 4;
 	} else if ((ch > 64) && (ch < 91)) {
-		iReturn = ch - 'A';
+		return ch - 'A';
 	} else if ((ch > 96) && (ch < 123)) {
-		iReturn = (ch - 'a') + 26;
+		return (ch - 'a') + 26;
 	}
-	return iReturn;
+	return -1;
 }
 
 /**************************************************************************/
-static inline unsigned int rotl32(unsigned int n, unsigned int c)
+static inline unsigned int rotl16(unsigned int n, unsigned int c)
 /**************************************************************************/
 {
-	unsigned int mask = (8 * sizeof(n) - 1);
-	c &= mask;
-	return (n << c) | (n >> ((-c) & mask));
+	n = n & 0xFFFF;
+	c &= 15;
+	return ((n << c) | (n >> (16 - c))) & 0xFFFF;
 }
 
 /**************************************************************************/
-static inline unsigned int rotr32(unsigned int n, unsigned int c)
+static inline unsigned int rotr16(unsigned int n, unsigned int c)
 /**************************************************************************/
 {
-	unsigned int mask = (8 * sizeof(n) - 1);
-	c &= mask;
-	return (n >> c) | (n << ((-c) & mask));
+	n = n & 0xFFFF;
+	c &= 15;
+	return ((n >> c) | (n << (16 - c))) & 0xFFFF;
 }
 
 /**************************************************************************/
@@ -77,10 +92,10 @@ static inline unsigned int b64_int_from_index(unsigned int ch)
 void b64_shuffle(unsigned int iKey)
 /**************************************************************************/
 {
-	unsigned int iDither = 0x5aa55aa5;
+	unsigned int iDither = 0x5aa5;
 	for (int i = 0; i < 64; ++i) {
-		iKey = rotl32(iKey, 1);
-		iDither = rotr32(iDither, 1);
+		iKey = rotl16(iKey, 1);
+		iDither = rotr16(iDither, 1);
 		int iSwitchIndex = i + (iKey ^ iDither) % (64 - i);
 		unsigned char iA = b64_code[i];
 		b64_code[i] = b64_code[iSwitchIndex];
@@ -129,15 +144,18 @@ unsigned int b64_encode(const unsigned char *in, unsigned int in_len,
 		b64_init(0);
 	}
 	unsigned int i = 0, j = 0, k = 0, s[3];
-	unsigned int iDither = 0xa55aa55a;
+	unsigned int iDither = 0xa55a;
 	unsigned char iG = 0;
 
 	for (i = 0; i < in_len; i++) {
-//		s[j++] = *(in + i);
+// No glueing
+//		s[j] = *(in + i);
+//		++j;
 // Glueing
 		iG = (unsigned char) (*(in + i) ^ iDither);
-		s[j++] = iG;
-		iDither = rotr32(iDither, 1) ^ iG;
+		s[j] = iG;
+		++j;
+		iDither = rotr16(iDither, 1) ^ iG;
 //.
 		if (j == 3) {
 			out[k + 0] = b64_code[(s[0] & 255) >> 2];
@@ -148,7 +166,6 @@ unsigned int b64_encode(const unsigned char *in, unsigned int in_len,
 			k += 4;
 		}
 	}
-
 	if (j) {
 		if (j == 1)
 			s[1] = 0;
@@ -161,9 +178,7 @@ unsigned int b64_encode(const unsigned char *in, unsigned int in_len,
 		out[k + 3] = '=';
 		k += 4;
 	}
-
 	out[k] = '\0';
-
 	return k;
 }
 
@@ -176,11 +191,12 @@ unsigned int b64_decode(const unsigned char *in, unsigned int in_len,
 		b64_init(0);
 	}
 	unsigned int i = 0, j = 0, k = 0, s[4];
-	unsigned int iDither = 0xa55aa55a;
+	unsigned int iDither = 0xa55a;
 	unsigned char iG = 0;
 
 	for (i = 0; i < in_len; i++) {
-		s[j++] = b64_int_from_index(*(in + i));
+		s[j] = b64_int_from_index(*(in + i));
+		++j;
 		if (j == 4) {
 			out[k + 0] = ((s[0] & 255) << 2) + ((s[1] & 0x30) >> 4);
 			if (s[2] != 64) {
@@ -202,7 +218,7 @@ unsigned int b64_decode(const unsigned char *in, unsigned int in_len,
 	for (int i = 0; i < k; i++) {
 		iG = out[i];
 		out[i] = (unsigned char) (out[i] ^ iDither);
-		iDither = rotr32(iDither, 1) ^ iG;
+		iDither = rotr16(iDither, 1) ^ iG;
 	}
 //.
 	return k;
@@ -243,7 +259,7 @@ int main(void)
 //	return 0;
 
 	printf("B64 encryptor demonstration\n");
-	unsigned int iCryptKey = currentTimeMillis();
+	unsigned int iCryptKey = 128; //currentTimeMillis();
 	b64_init(iCryptKey);
 	printf("Crypt key: 0x%x\n", iCryptKey);
 	printf("B64 code table: %s\n", b64_code);
@@ -272,7 +288,7 @@ int main(void)
 	printf("%d\n", iDecodedSize);
 
 	int iTS = currentTimeMillis();
-	long iExperiments = 1234567;//8;
+	long iExperiments = 1234567;
 	int iProgressPrev = 0;
 	int iProgress = 0;
 	int iMsgSize = 80;
