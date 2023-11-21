@@ -264,7 +264,7 @@ int main(void)
 	printf("Crypt key: 0x%x\n", iCryptKey);
 	printf("B64 code table: %s\n", b64_code);
 
-	const unsigned char sTest[256] =
+	const char sTest[256] =
 			"000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov.";
 	//char *sTest = (char*) b64_code;
 	unsigned char sBufferDe[256] = { 0 };
@@ -282,7 +282,7 @@ int main(void)
 	printf("Crypt text: %s\n", sBufferEn);
 	printf("%d\n", iEncodedSize);
 
-	iDecodedSize = b64_decode((unsigned char*) sBufferEn, strlen(sBufferEn),
+	iDecodedSize = b64_decode((unsigned char*) sBufferEn, iEncodedSize,
 			(unsigned char*) sBufferDe);
 	printf("Decrypt text: %s\n", sBufferDe);
 	printf("%d\n", iDecodedSize);
