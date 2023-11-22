@@ -1,4 +1,12 @@
-﻿using System;
+﻿//============================================================================
+// Name        : Base64_Encrypted_CPP.cpp
+// Author      : Tofig Kareemov
+// Version     :
+// Copyright   : Your copyright notice
+// Description : C# implementation of Base64 Encryptor
+//============================================================================
+
+using System;
 using System.Text;
 
 public class B64Encryptor
