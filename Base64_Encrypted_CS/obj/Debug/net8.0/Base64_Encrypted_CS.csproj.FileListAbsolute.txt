@@ -1,0 +1,14 @@
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/bin/Debug/net8.0/Base64_Encrypted_CS
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/bin/Debug/net8.0/Base64_Encrypted_CS.deps.json
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/bin/Debug/net8.0/Base64_Encrypted_CS.runtimeconfig.json
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/bin/Debug/net8.0/Base64_Encrypted_CS.dll
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/bin/Debug/net8.0/Base64_Encrypted_CS.pdb
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/Base64_Encrypted_CS.GeneratedMSBuildEditorConfig.editorconfig
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/Base64_Encrypted_CS.AssemblyInfoInputs.cache
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/Base64_Encrypted_CS.AssemblyInfo.cs
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/Base64_Encrypted_CS.csproj.CoreCompileInputs.cache
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/Base64_Encrypted_CS.dll
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/refint/Base64_Encrypted_CS.dll
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/Base64_Encrypted_CS.pdb
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/Base64_Encrypted_CS.genruntimeconfig.cache
+/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_CS/Base64_Encrypted_CS/obj/Debug/net8.0/ref/Base64_Encrypted_CS.dll

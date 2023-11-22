@@ -1,3 +1,12 @@
+/*
+ ============================================================================
+ Name        : B64Encryptor.java
+ Author      : Tofig Kareemov
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Base64 Encryptor in Java
+ ============================================================================
+ */
 package com.androphic.base64.encryptor;
 
 import java.util.Arrays;
@@ -154,7 +163,7 @@ public class B64Encryptor {
 // Unglueing
 		for (int i = 0; i < k; ++i) {
 			iG = out[i] & 0xff;
-			out[i] = (byte) (out[i] ^ iDither);
+			out[i] = (byte) ((out[i] ^ iDither & 0xff) & 0xff);
 			iDither = rotr16(iDither, 1) ^ iG;
 		}
 //.

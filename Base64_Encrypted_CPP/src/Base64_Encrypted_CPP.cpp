@@ -152,7 +152,7 @@ private:
 
         for (int i = 0; i < k; ++i) {
             iG = out[i] & 0xff;
-            out[i] = (out[i] ^ iDither);
+            out[i] = (((out[i] ^ iDither) & 0xff) & 0xff);
             iDither = rotr16(iDither, 1) ^ iG;
         }
         out[k] = '\0';
@@ -185,6 +185,7 @@ public:
         int iProgressPrev = 0;
         int iProgress = 0;
         int iMsgSize = 80;
+
         for (long i = 0; i < iExperiments; ++i) {
             iMsgSize = static_cast<int>(i % 256);
             iCryptKey = static_cast<int>(std::time(nullptr));
