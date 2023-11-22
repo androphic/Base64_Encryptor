@@ -3,7 +3,7 @@
 // Author      : Tofig Kareemov
 // Version     :
 // Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Description : C++ implementation of Base64 Encryptor
 //============================================================================
 
 #include <iostream>

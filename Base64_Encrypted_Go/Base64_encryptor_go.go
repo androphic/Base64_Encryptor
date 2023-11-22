@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : Base64_Encrypted_go.go
+// Author      : Tofig Kareemov
+// Version     :
+// Copyright   : Your copyright notice
+// Description : GoLang implementation of Base64 Encryptor
+//============================================================================
+
 package main
 
 import (
