@@ -237,6 +237,6 @@ func main() {
 		}
 	}
 
-	fmt.Printf("Time (millis): %d\n", int(time.Now().Unix())-iTS)
+	fmt.Printf("Time (seconds): %d\n", int(time.Now().Unix())-iTS)
 }
 
