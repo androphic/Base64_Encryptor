@@ -173,6 +173,15 @@ public class B64Encryptor {
 
 	public static void main(String[] args) {
 		System.out.println("B64 encryptor demonstration");
+		for (int i = 0; i < 32; ++i) {
+			System.out.print(" " + rotl16(0xa5, i) + ", ");
+		}
+		System.out.println();
+		for (int i = 0; i < 32; ++i) {
+			System.out.print(" " + rotr16(0xa5, i) + ", ");
+		}
+		System.out.println();
+
 		int iCryptKey = 128; // (int) System.currentTimeMillis();
 		b64_init(iCryptKey);
 		System.out.println("Crypt key: 0x" + Integer.toHexString(iCryptKey));
@@ -194,7 +203,7 @@ public class B64Encryptor {
 		System.out.println("Decrypt text: " + new String(sBufferDe));
 		System.out.println(iDecodedSize);
 		int iTS = (int) System.currentTimeMillis();
-		long iExperiments = 1234567;
+		long iExperiments = 12345;
 		int iProgressPrev = 0;
 		int iProgress = 0;
 		int iMsgSize = 80;

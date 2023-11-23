@@ -1,0 +1,5 @@
+[debug] Created transactional ClassFileManager with tempDir = /Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_Scala/base64_encrypted_scala_project/project/project/target/scala-2.12/sbt-1.0/classes.bak
+[debug] About to delete class files:
+[debug] We backup class files:
+[debug] Created transactional ClassFileManager with tempDir = /Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_Scala/base64_encrypted_scala_project/project/project/target/scala-2.12/sbt-1.0/classes.bak
+[debug] Removing the temporary directory used for backing up class files: /Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_Scala/base64_encrypted_scala_project/project/project/target/scala-2.12/sbt-1.0/classes.bak
