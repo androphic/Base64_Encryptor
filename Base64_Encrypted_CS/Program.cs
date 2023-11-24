@@ -226,7 +226,7 @@ public class B64Encryptor
         Console.WriteLine("B64 code table: " + new string(b64_code));
         string sTest = "000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov.";
         char[] sBufferDe = new char[256];
-        char[] sBufferEn = new char[256 * 4 / 3];
+        char[] sBufferEn = new char[256 * 4 / 3 + 1];
         int iSourceSize = 0;
         int iEncodedSize = 0;
         int iDecodedSize = 0;

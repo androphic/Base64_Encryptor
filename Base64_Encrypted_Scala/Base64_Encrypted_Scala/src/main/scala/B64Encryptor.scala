@@ -176,7 +176,7 @@ object B64Encryptor {
     println("B64 code table: " + b64_code.mkString("[", ", ", "]"))
     val sTest = "000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov.".getBytes
     val sBufferDe = new Array[Byte](256)
-    val sBufferEn = new Array[Byte](256 * 4 / 3)
+    val sBufferEn = new Array[Byte](256 * 4 / 3 + 1)
     var iSourceSize = 0
     var iEncodedSize = 0
     var iDecodedSize = 0

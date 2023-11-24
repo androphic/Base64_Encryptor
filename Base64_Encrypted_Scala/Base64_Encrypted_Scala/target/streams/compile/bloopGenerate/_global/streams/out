@@ -1,4 +1,4 @@
-[debug] [base64_encrypted_scala_project] Classpath dependencies List()
-[debug] [base64_encrypted_scala_project] Dependencies from configurations List()
-[debug] Bloop wrote the configuration of project 'base64_encrypted_scala_project' to '/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_Scala/base64_encrypted_scala_project/.bloop/base64_encrypted_scala_project.json'
-[success] Generated .bloop/base64_encrypted_scala_project.json
+[debug] [base64_encrypted_scala] Classpath dependencies List()
+[debug] [base64_encrypted_scala] Dependencies from configurations List()
+[debug] Bloop wrote the configuration of project 'base64_encrypted_scala' to '/Users/tofigkareemov/Tofig/Androphic_freelancer/XCode/Base64_Encrypted_Scala/Base64_Encrypted_Scala/.bloop/base64_encrypted_scala.json'
+[success] Generated .bloop/base64_encrypted_scala.json
