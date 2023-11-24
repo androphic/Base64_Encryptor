@@ -171,7 +171,7 @@ func (b *B64Encryptor) b64Decode(input []byte, iLen int, output []byte) int {
 
 func main() {
 	iBufferDe := [256]byte{}
-	iBufferEn := [256 * 4 / 3]byte{}
+	iBufferEn := [256 * 4 / 3 + 1]byte{}
 
 	fmt.Println("B64 encryptor demonstration")
 	iCryptKey := 128
@@ -207,7 +207,7 @@ func main() {
 
 	for i := int64(0); i < iExperiments; i++ {
 		iBufferDe = [256]byte{}
-		iBufferEn = [256 * 4 / 3]byte{}
+		iBufferEn = [256 * 4 / 3 + 1]byte{}
 		iMsgSize = int(i % 256)
 		iCryptKey = int(time.Now().Unix())
 		b64Encryptor.b64Init(iCryptKey)

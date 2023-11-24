@@ -169,7 +169,7 @@ class B64Encryptor:
         print("B64 code table: {}".format(B64Encryptor.b64_code))
         sTest = "000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov."
         sBufferDe = [0] * 256
-        sBufferEn = [0] * (256 * 4 // 3)
+        sBufferEn = [0] * (256 * 4 // 3 + 1)
         iSourceSize = 0
         iEncodedSize = 0
         iDecodedSize = 0
@@ -189,7 +189,7 @@ class B64Encryptor:
         #print (list(map(chr,sBufferDe)))
         print(iDecodedSize)
         iTS = int(time.time())
-        iExperiments = 12345
+        iExperiments = 123456
         iProgressPrev = 0
         iProgress = 0
         iMsgSize = 80

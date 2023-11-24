@@ -30,7 +30,7 @@ public class B64Encryptor {
 		} else if ((ch > 96) && (ch < 123)) {
 			return (ch - 'a') + 26;
 		}
-		return -1;
+		return 64;
 	}
 
 	private static int rotl16(int n, int c) {
@@ -74,7 +74,7 @@ public class B64Encryptor {
 			b64_index[i] = i & 0xff;
 			b64_code[i] = sB64Chars[i];
 		}
-		b64_code[64] = 0;
+		b64_code[64] = 64;
 		b64_shuffle(iKey);
 		bInitialized = true;
 	}
@@ -186,10 +186,11 @@ public class B64Encryptor {
 		b64_init(iCryptKey);
 		System.out.println("Crypt key: 0x" + Integer.toHexString(iCryptKey));
 		System.out.println("B64 code table: " + Arrays.toString(b64_code));
+		System.out.println("B64 code index table: " + Arrays.toString(b64_index));
 		byte[] sTest = "000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov."
 				.getBytes();
 		byte[] sBufferDe = new byte[256];
-		byte[] sBufferEn = new byte[256 * 4 / 3];
+		byte[] sBufferEn = new byte[256 * 4 / 3 + 1];
 		int iSourceSize = 0;
 		int iEncodedSize = 0;
 		int iDecodedSize = 0;

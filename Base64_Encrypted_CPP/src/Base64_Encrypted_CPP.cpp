@@ -167,7 +167,7 @@ public:
         std::cout << "B64 code table: " << b64_code << std::endl;
         char sTest[] = "000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov.";
         char sBufferDe[256];
-        char sBufferEn[256 * 4 / 3];
+        char sBufferEn[256 * 4 / 3 + 1];
         int iSourceSize = 0;
         int iEncodedSize = 0;
         int iDecodedSize = 0;
@@ -181,7 +181,7 @@ public:
         std::cout << "Decrypt text: " << sBufferDe << std::endl;
         std::cout << iDecodedSize << std::endl;
         int iTS = static_cast<int>(std::time(nullptr));
-        long iExperiments = 1234567;
+        long iExperiments = 12345678;
         int iProgressPrev = 0;
         int iProgress = 0;
         int iMsgSize = 80;
