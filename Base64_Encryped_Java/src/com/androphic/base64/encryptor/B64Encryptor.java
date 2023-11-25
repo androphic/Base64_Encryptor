@@ -107,8 +107,8 @@ public class B64Encryptor {
 // .
 			if (j == 3) {
 				out[k + 0] = (byte) b64_code[(s[0] & 255) >> 2];
-				out[k + 1] = (byte) b64_code[((s[0] & 0x03) << 4) + ((s[1] & 0xF0) >> 4)];
-				out[k + 2] = (byte) b64_code[((s[1] & 0x0F) << 2) + ((s[2] & 0xC0) >> 6)];
+				out[k + 1] = (byte) b64_code[((s[0] & 0x03) << 4) | ((s[1] & 0xF0) >> 4)];
+				out[k + 2] = (byte) b64_code[((s[1] & 0x0F) << 2) | ((s[2] & 0xC0) >> 6)];
 				out[k + 3] = (byte) b64_code[s[2] & 0x3F];
 				j = 0;
 				k += 4;
@@ -119,7 +119,7 @@ public class B64Encryptor {
 				s[1] = 0;
 			}
 			out[k + 0] = (byte) b64_code[(s[0] & 255) >> 2];
-			out[k + 1] = (byte) b64_code[((s[0] & 0x03) << 4) + ((s[1] & 0xF0) >> 4)];
+			out[k + 1] = (byte) b64_code[((s[0] & 0x03) << 4) | ((s[1] & 0xF0) >> 4)];
 			if (j == 2) {
 				out[k + 2] = (byte) b64_code[((s[1] & 0x0F) << 2)];
 			} else {
@@ -144,11 +144,11 @@ public class B64Encryptor {
 			s[j++] = b64_int_from_index(in[i]);
 			if (j == 4) {
 				if (s[1] != 64) {
-					out[k + 0] = (byte) (((s[0] & 255) << 2) + ((s[1] & 0x30) >> 4));
+					out[k + 0] = (byte) (((s[0] & 255) << 2) | ((s[1] & 0x30) >> 4));
 					if (s[2] != 64) {
-						out[k + 1] = (byte) (((s[1] & 0x0F) << 4) + ((s[2] & 0x3C) >> 2));
+						out[k + 1] = (byte) (((s[1] & 0x0F) << 4) | ((s[2] & 0x3C) >> 2));
 						if (s[3] != 64) {
-							out[k + 2] = (byte) (((s[2] & 0x03) << 6) + (s[3]));
+							out[k + 2] = (byte) (((s[2] & 0x03) << 6) | (s[3]));
 							k += 3;
 						} else {
 							k += 2;

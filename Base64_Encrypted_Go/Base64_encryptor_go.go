@@ -76,6 +76,7 @@ func (b *B64Encryptor) b64Init(iKey int) {
 		b.b64Index[i] = (byte)(i & 0xff)
 		b.b64Code[i] = sB64Chars[i]
 	}
+	b.b64Code[64] = 64
 	b.b64Shuffle(iKey)
 	b.bInitialized = true
 }
@@ -104,8 +105,8 @@ func (b *B64Encryptor) b64Encode(input []byte, iLen int, output []byte) int {
 		iDither = b.rotr16(iDither, 1) ^ iG
 		if j == 3 {
 			output[k+0] = b.b64Code[(s[0]&255)>>2]
-			output[k+1] = b.b64Code[((s[0]&0x03)<<4)+((s[1]&0xF0)>>4)]
-			output[k+2] = b.b64Code[((s[1]&0x0F)<<2)+((s[2]&0xC0)>>6)]
+			output[k+1] = b.b64Code[((s[0]&0x03)<<4)|((s[1]&0xF0)>>4)]
+			output[k+2] = b.b64Code[((s[1]&0x0F)<<2)|((s[2]&0xC0)>>6)]
 			output[k+3] = b.b64Code[s[2]&0x3F]
 			j = 0
 			k += 4
@@ -117,7 +118,7 @@ func (b *B64Encryptor) b64Encode(input []byte, iLen int, output []byte) int {
 			s[1] = 0
 		}
 		output[k+0] = b.b64Code[(s[0]&255)>>2]
-		output[k+1] = b.b64Code[((s[0]&0x03)<<4)+((s[1]&0xF0)>>4)]
+		output[k+1] = b.b64Code[((s[0]&0x03)<<4)|((s[1]&0xF0)>>4)]
 		if j == 2 {
 			output[k+2] = b.b64Code[((s[1] & 0x0F) << 2)]
 		} else {
@@ -143,11 +144,11 @@ func (b *B64Encryptor) b64Decode(input []byte, iLen int, output []byte) int {
 		j++
 		if j == 4 {
 			if s[1] != 64 {
-				output[k+0] = (byte(((s[0] & 255) << 2) + ((s[1] & 0x30) >> 4)))
+				output[k+0] = (byte(((s[0] & 255) << 2) | ((s[1] & 0x30) >> 4)))
 				if s[2] != 64 {
-					output[k+1] = (byte(((s[1] & 0x0F) << 4) + ((s[2] & 0x3C) >> 2)))
+					output[k+1] = (byte(((s[1] & 0x0F) << 4) | ((s[2] & 0x3C) >> 2)))
 					if s[3] != 64 {
-						output[k+2] = (byte(((s[2] & 0x03) << 6) + s[3]))
+						output[k+2] = (byte(((s[2] & 0x03) << 6) | s[3]))
 						k += 3
 					} else {
 						k += 2
