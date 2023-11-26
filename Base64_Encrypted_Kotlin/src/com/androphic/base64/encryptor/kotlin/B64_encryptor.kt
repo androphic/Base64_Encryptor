@@ -13,8 +13,8 @@ object B64_Encryptor {
 			43 -> 62
 			47 -> 63
 			in 48..57 -> ch + 4
-			in 65..90 -> ch - 'A'.toInt()
-			in 96..123 -> (ch - 'a'.toInt()) + 26
+			in 65..90 -> ch - 'A'.code
+			in 96..123 -> (ch - 'a'.code) + 26
 			else -> 64
 		}
 	}
@@ -90,10 +90,10 @@ object B64_Encryptor {
 			j++
 			iDither = rotr16(iDither, 1) xor iG
 			if (j == 3) {
-				output[k + 0] = b64Code[(s[0] and 255) ushr 2].toByte()
-				output[k + 1] = b64Code[((s[0] and 0x03) shl 4) or ((s[1] and 0xF0) ushr 4)].toByte()
-				output[k + 2] = b64Code[((s[1] and 0x0F) shl 2) or ((s[2] and 0xC0) ushr 6)].toByte()
-				output[k + 3] = b64Code[s[2] and 0x3F].toByte()
+				output[k + 0] = b64Code[(s[0] and 255) ushr 2].code.toByte()
+				output[k + 1] = b64Code[((s[0] and 0x03) shl 4) or ((s[1] and 0xF0) ushr 4)].code.toByte()
+				output[k + 2] = b64Code[((s[1] and 0x0F) shl 2) or ((s[2] and 0xC0) ushr 6)].code.toByte()
+				output[k + 3] = b64Code[s[2] and 0x3F].code.toByte()
 				j = 0
 				k += 4
 			}
@@ -103,14 +103,14 @@ object B64_Encryptor {
 			if (j == 1) {
 				s[1] = 0
 			}
-			output[k + 0] = b64Code[(s[0] and 255) ushr 2].toByte()
-			output[k + 1] = b64Code[((s[0] and 0x03) shl 4) or ((s[1] and 0xF0) ushr 4)].toByte()
+			output[k + 0] = b64Code[(s[0] and 255) ushr 2].code.toByte()
+			output[k + 1] = b64Code[((s[0] and 0x03) shl 4) or ((s[1] and 0xF0) ushr 4)].code.toByte()
 			if (j == 2) {
-				output[k + 2] = b64Code[((s[1] and 0x0F) shl 2)].toByte()
+				output[k + 2] = b64Code[((s[1] and 0x0F) shl 2)].code.toByte()
 			} else {
-				output[k + 2] = '='.toByte()
+				output[k + 2] = '='.code.toByte()
 			}
-			output[k + 3] = '='.toByte()
+			output[k + 3] = '='.code.toByte()
 			k += 4
 		}
 		output[k] = 0.toByte()
@@ -126,9 +126,9 @@ object B64_Encryptor {
 		val s = IntArray(4)
 		var iDither = 0xa55a
 		var iG: Int
-		var i = 0
-		while (i < inLen) {
-			s[j++] = b64IntFromIndex(input[i].toInt())
+		var i1 = 0
+		while (i1 < inLen) {
+			s[j++] = b64IntFromIndex(input[i1].toInt())
 			if (j == 4) {
 				if (s[1] != 64) {
 					output[k + 0] = (((s[0] and 255) shl 2) or ((s[1] and 0x30) ushr 4)).toByte()
@@ -146,7 +146,7 @@ object B64_Encryptor {
 				}
 				j = 0
 			}
-			i++
+			i1++
 		}
 		for (i in 0 until k) {
 			iG = output[i].toInt() and 0xff
@@ -194,8 +194,7 @@ object B64_Encryptor {
 		val iExperiments: Long = 12345
 		var iProgressPrev = 0
 		var iProgress: Int
-		var iMsgSize = 80
-		var i1: Int
+		var iMsgSize: Int
 		for (i in 0 until iExperiments) {
 			iMsgSize = (i % 256).toInt()
 			val iCryptKeyVar = System.currentTimeMillis().toInt()
@@ -213,7 +212,7 @@ object B64_Encryptor {
 			}
 			iProgress = (i * 100 / iExperiments).toInt()
 			if (iProgressPrev != iProgress) {
-				println("Progress: $iProgress%, ${String(sBufferEn).split(0.toChar())[0]}")
+				println("Progress: $iProgress%, ${String(sBufferEn).split(0.toChar())[0]}, $iDecodedSize")
 				iProgressPrev = iProgress
 			}
 		}
