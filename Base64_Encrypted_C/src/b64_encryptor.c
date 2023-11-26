@@ -230,35 +230,6 @@ unsigned int b64_decode(const unsigned char *in, unsigned int in_len,
 int main(void)
 /**************************************************************************/
 {
-
-//	int iCol[iColSize * iColSize] = { 0 };
-//	int iColIndex = 0;
-//
-//	for (int iSize = 10; iSize <= 12; iSize=iSize+1) {
-//		for (int i = 1; i <= iSize; ++i) {
-//			for (int i1 = 1; i1 <= i; ++i1) {
-//				int iRes = i * i1;
-//				int bFound = 0;
-//				for (int i2 = 0; i2 < iColIndex; ++i2) {
-//					if (iCol[i2] == iRes)
-//						bFound = 1;
-//				}
-//				if (!bFound) {
-//					iCol[iColIndex] = iRes;
-//					++iColIndex;
-//				}
-//			}
-//		}
-//		printf("%d = %d\n", iSize, iColIndex);
-//	}
-//	for (int i2 = 0; i2 < iColSize * iColSize; ++i2) {
-//		printf("%d ", iCol[i2]);
-//	}
-//	printf("\n");
-//	printf("%d \n", iColIndex);
-
-//	return 0;
-
 	printf("B64 encryptor demonstration\n");
 	unsigned int iCryptKey = 128; //currentTimeMillis();
 	b64_init(iCryptKey);
@@ -320,4 +291,6 @@ int main(void)
 
 	return 0;
 }
+
+
 
