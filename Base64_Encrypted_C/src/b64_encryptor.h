@@ -123,6 +123,8 @@ static void b64_init(unsigned int iKey[], int iSize)
 {
 	unsigned char sB64Chars[] =
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	bToGlue = 0;
+	bInitialized = 0;
 	for (int i = 0; i < 64; ++i) {
 		b64_index[i] = (unsigned char) (i & 0xff);
 		b64_code[i] = sB64Chars[i];
@@ -130,6 +132,27 @@ static void b64_init(unsigned int iKey[], int iSize)
 	b64_code[64] = 0;
 	for (int i = 0; i < iSize; ++i) {
 		b64_shuffle(iKey[i]);
+	}
+	bInitialized = 1;
+}
+
+/**************************************************************************/
+static void b64_init_string(char *sKey)
+/**************************************************************************/
+{
+	unsigned char sB64Chars[] =
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	bToGlue = 0;
+	bInitialized = 0;
+	for (int i = 0; i < 64; ++i) {
+		b64_index[i] = (unsigned char) (i & 0xff);
+		b64_code[i] = sB64Chars[i];
+	}
+	b64_code[64] = 0;
+	if (sKey != 0) {
+		for (int i = 0; i < strlen(sKey); ++i) {
+			b64_shuffle(sKey[i]);
+		}
 	}
 	bInitialized = 1;
 }
