@@ -15,9 +15,8 @@ int main(void)
 /**************************************************************************/
 {
 	printf("B64 encryptor demonstration\n");
-//	unsigned int iCryptKey[] = {128, 256, 1024};
-	unsigned int iCryptKey[] = {128};
-	int iCryptKeySize = sizeof(iCryptKey)/sizeof(iCryptKey[0]);
+	unsigned int iCryptKey[] = { 128, 12345, 67890 };
+	int iCryptKeySize = sizeof(iCryptKey) / sizeof(iCryptKey[0]);
 	const char sTest[256] =
 			"000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov.";
 	unsigned char sBufferDe[256] = { 0 };
@@ -29,9 +28,10 @@ int main(void)
 	iSourceSize = strlen(sTest);
 	printf("Plain text: %s\n", sTest);
 	printf("%d\n", iSourceSize);
-	printf("-----------------------------------------------------------------------\n");
+	printf(
+			"-----------------------------------------------------------------------\n");
 
-	b64_init(0,0);
+	b64_init(0, 0);
 	printf("B64 code table: %s\n", b64_code);
 	iEncodedSize = b64_encode((unsigned char*) sTest, strlen(sTest),
 			(unsigned char*) sBufferEn);
@@ -41,14 +41,15 @@ int main(void)
 			(unsigned char*) sBufferDe);
 	printf("Standard Base64 decoded text: %s\n", sBufferDe);
 	printf("%d\n", iDecodedSize);
-	printf("-----------------------------------------------------------------------\n");
+	printf(
+			"-----------------------------------------------------------------------\n");
 
 	printf("Encryption with int[] as a key:");
-	for (int i=0;i<iCryptKeySize;++i){
+	for (int i = 0; i < iCryptKeySize; ++i) {
 		printf(" 0x%x", iCryptKey[i]);
 	}
 	printf("\n");
-	b64_init(iCryptKey,iCryptKeySize);
+	b64_init(iCryptKey, iCryptKeySize);
 	printf("B64 code table: %s\n", b64_code);
 	iEncodedSize = b64_encode((unsigned char*) sTest, strlen(sTest),
 			(unsigned char*) sBufferEn);
@@ -58,7 +59,8 @@ int main(void)
 			(unsigned char*) sBufferDe);
 	printf("Decrypted text: %s\n", sBufferDe);
 	printf("%d\n", iDecodedSize);
-	printf("-----------------------------------------------------------------------\n");
+	printf(
+			"-----------------------------------------------------------------------\n");
 
 	printf("Encryption with text as a key: %s\n", "ThisIsTheKey");
 	b64_init_string("ThisIsTheKey");
@@ -71,7 +73,27 @@ int main(void)
 			(unsigned char*) sBufferDe);
 	printf("Decrypted text: %s\n", sBufferDe);
 	printf("%d\n", iDecodedSize);
-	printf("-----------------------------------------------------------------------\n");
+	printf(
+			"-----------------------------------------------------------------------\n");
+
+	iCryptKeySize = 1;
+	printf("Encryption with int[] as a key:");
+	for (int i = 0; i < iCryptKeySize; ++i) {
+		printf(" 0x%x", iCryptKey[i]);
+	}
+	printf("\n");
+	b64_init(iCryptKey, iCryptKeySize);
+	printf("B64 code table: %s\n", b64_code);
+	iEncodedSize = b64_encode((unsigned char*) sTest, strlen(sTest),
+			(unsigned char*) sBufferEn);
+	printf("Encrypted text: %s\n", sBufferEn);
+	printf("%d\n", iEncodedSize);
+	iDecodedSize = b64_decode((unsigned char*) sBufferEn, iEncodedSize,
+			(unsigned char*) sBufferDe);
+	printf("Decrypted text: %s\n", sBufferDe);
+	printf("%d\n", iDecodedSize);
+	printf(
+			"-----------------------------------------------------------------------\n");
 
 	int iTS = currentTimeMillis();
 	long iExperiments = 123456;
@@ -81,7 +103,9 @@ int main(void)
 	for (long i = 0; i < iExperiments; ++i) {
 		iMsgSize = i % 256;
 		iCryptKey[0] = currentTimeMillis();
-		b64_init(iCryptKey,1);
+		iCryptKey[1] = currentTimeMillis();
+		iCryptKey[2] = currentTimeMillis();
+		b64_init(iCryptKey, 3);
 		for (int i1 = 0; i1 < iMsgSize; ++i1) {
 			sBufferDe[i1] = (unsigned char) (i1 + i);
 		}
@@ -105,5 +129,4 @@ int main(void)
 
 	return 0;
 }
-
 
