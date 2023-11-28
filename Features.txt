@@ -23,7 +23,7 @@ C
 - Advanced version
 
 C++ 
-- Basic version
+- Advanced version. Works but not yet fully tested.
 
 C# 
 - Basic version
