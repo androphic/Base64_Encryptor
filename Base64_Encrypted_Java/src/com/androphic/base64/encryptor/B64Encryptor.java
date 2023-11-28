@@ -264,6 +264,8 @@ public class B64Encryptor {
 		System.out.println(new String(sBufferDe));
 		System.out.println(iDecodedSize);
 		System.out.println("-----------------------------------------------------------------------");
+		sBufferDe = new byte[256];
+		sBufferEn = new byte[256 * 4 / 3 + 1];
 		System.out.println("Encryption with int[] as key");
 		o.b64_set_key_i(iCryptKey, iCryptKey.length);
 		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
@@ -277,6 +279,8 @@ public class B64Encryptor {
 		System.out.println(new String(sBufferDe));
 		System.out.println(iDecodedSize);
 		System.out.println("-----------------------------------------------------------------------");
+		sBufferDe = new byte[256];
+		sBufferEn = new byte[256 * 4 / 3 + 1];
 		System.out.println("Encryption with String as key");
 		o.b64_set_key_s("ThisIsTheKey1");
 		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
@@ -290,6 +294,8 @@ public class B64Encryptor {
 		System.out.println(new String(sBufferDe));
 		System.out.println(iDecodedSize);
 		System.out.println("-----------------------------------------------------------------------");
+		sBufferDe = new byte[256];
+		sBufferEn = new byte[256 * 4 / 3 + 1];
 		System.out.println("Encryption with int[0] as key");
 		o.b64_set_key_i(iCryptKey, 1);
 		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
@@ -304,6 +310,8 @@ public class B64Encryptor {
 		System.out.println(iDecodedSize);
 		System.out.println("-----------------------------------------------------------------------");
 
+		sBufferDe = new byte[256];
+		sBufferEn = new byte[256 * 4 / 3 + 1];
 		int iTS = (int) System.currentTimeMillis();
 		long iExperiments = 1234567;
 		int iProgressPrev = 0;
