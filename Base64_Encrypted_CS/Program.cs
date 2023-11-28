@@ -8,7 +8,6 @@
 
 using System;
 using System.Text;
-using System;
 
     public class B64Encryptor
     {
@@ -373,13 +372,18 @@ using System;
         int iProgressPrev = 0;
         int iProgress = 0;
         int iMsgSize = 80;
+        var random = new Random();
 
         for (long i = 0; i < iExperiments; ++i)
         {
             iMsgSize = (int)(i % 256);
-            iCryptKey[0] = (int)DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            iCryptKey[1] = (int)DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            iCryptKey[2] = (int)DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+            iCryptKey[0] = random.Next(0, 65536);
+            iCryptKey[1] = random.Next(0, 65536);
+            iCryptKey[2] = random.Next(0, 65536);
+            // iCryptKey[0] = (int)DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            // iCryptKey[1] = (int)DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            // iCryptKey[2] = (int)DateTimeOffset.Now.ToUnixTimeMilliseconds();
             o.B64SetKeyI(iCryptKey, 3);
 
             for (int i1 = 0; i1 < iMsgSize; ++i1)
