@@ -1,0 +1,49 @@
+Basic version
+- Basic encryption with an integer Key
+- Basic key shuffling
+- Basic gluing
+- No naming convention
+- No Modularity
+- No support for regular Base64 encoding
+
+Advanced version
+- Advanced Key Shuffling
+- Advanced Encrypted Text Gluing
+- Integer Array as a Key
+- ASCII string as a Key
+- Ignoring non-base64 characters while decryption/decoding
+- Encrypted text splitting to lines of given length
+- Modularity. The whole code is packed in one H-file.
+- Standard Naming convention
+- Standard Base64 encoding and decoding with zero-key
+
+C Version
+- Advanced version
+
+C++ version
+- Basic version
+
+C# version
+- Basic version
+
+Go version
+- Basic version
+
+Java version
+- Basic version
+
+Javascript version
+- Basic version
+
+Kotlin version
+- Basic version
+
+Python version
+- Basic version
+
+Rust version
+- Basic version
+
+Scala version
+- Basic version
+

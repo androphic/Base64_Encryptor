@@ -9,6 +9,21 @@
  */
 
 #include "b64_encryptor.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <stdint.h>
+#include <limits.h>
+
+/**************************************************************************/
+static unsigned int currentTimeMillis()
+/**************************************************************************/
+{
+	struct timeval oTime;
+	gettimeofday(&oTime, 0);
+	long long iMilliseconds = oTime.tv_sec * 1000LL + oTime.tv_usec / 1000;
+	return (unsigned int) iMilliseconds;
+}
 
 /**************************************************************************/
 int main(void)
@@ -30,12 +45,12 @@ int main(void)
 	printf("%d\n", iSourceSize);
 	printf(
 			"-----------------------------------------------------------------------\n");
-
-	b64_init(0, 0);
-	printf("B64 code table: %s\n", b64_code);
+	b64_set_key_i(0, 0);
+	printf("B64 code table: %s\n", iB64Code);
 	iEncodedSize = b64_encode((unsigned char*) sTest, strlen(sTest),
-			(unsigned char*) sBufferEn);
-	printf("Standard Base64 encoded text: %s\n", sBufferEn);
+			(unsigned char*) sBufferEn, 16);
+	printf("Standard Base64 encoded text:\n");
+	printf("%s\n", sBufferEn);
 	printf("%d\n", iEncodedSize);
 	iDecodedSize = b64_decode((unsigned char*) sBufferEn, iEncodedSize,
 			(unsigned char*) sBufferDe);
@@ -43,17 +58,17 @@ int main(void)
 	printf("%d\n", iDecodedSize);
 	printf(
 			"-----------------------------------------------------------------------\n");
-
 	printf("Encryption with int[] as a key:");
 	for (int i = 0; i < iCryptKeySize; ++i) {
 		printf(" 0x%x", iCryptKey[i]);
 	}
 	printf("\n");
-	b64_init(iCryptKey, iCryptKeySize);
-	printf("B64 code table: %s\n", b64_code);
+	b64_set_key_i(iCryptKey, iCryptKeySize);
+	printf("B64 code table: %s\n", iB64Code);
 	iEncodedSize = b64_encode((unsigned char*) sTest, strlen(sTest),
-			(unsigned char*) sBufferEn);
-	printf("Encrypted text: %s\n", sBufferEn);
+			(unsigned char*) sBufferEn, 32);
+	printf("Encrypted text:\n");
+	printf("%s\n", sBufferEn);
 	printf("%d\n", iEncodedSize);
 	iDecodedSize = b64_decode((unsigned char*) sBufferEn, iEncodedSize,
 			(unsigned char*) sBufferDe);
@@ -61,13 +76,13 @@ int main(void)
 	printf("%d\n", iDecodedSize);
 	printf(
 			"-----------------------------------------------------------------------\n");
-
-	printf("Encryption with text as a key: %s\n", "ThisIsTheKey");
-	b64_init_string("ThisIsTheKey");
-	printf("B64 code table: %s\n", b64_code);
+	printf("Encryption with text as a key: %s\n", "ThisIsTheKey1");
+	b64_set_key_s("ThisIsTheKey1");
+	printf("B64 code table: %s\n", iB64Code);
 	iEncodedSize = b64_encode((unsigned char*) sTest, strlen(sTest),
-			(unsigned char*) sBufferEn);
-	printf("Encrypted text: %s\n", sBufferEn);
+			(unsigned char*) sBufferEn, 64);
+	printf("Encrypted text:\n");
+	printf("%s\n", sBufferEn);
 	printf("%d\n", iEncodedSize);
 	iDecodedSize = b64_decode((unsigned char*) sBufferEn, iEncodedSize,
 			(unsigned char*) sBufferDe);
@@ -75,18 +90,18 @@ int main(void)
 	printf("%d\n", iDecodedSize);
 	printf(
 			"-----------------------------------------------------------------------\n");
-
 	iCryptKeySize = 1;
 	printf("Encryption with int[] as a key:");
 	for (int i = 0; i < iCryptKeySize; ++i) {
 		printf(" 0x%x", iCryptKey[i]);
 	}
 	printf("\n");
-	b64_init(iCryptKey, iCryptKeySize);
-	printf("B64 code table: %s\n", b64_code);
+	b64_set_key_i(iCryptKey, iCryptKeySize);
+	printf("B64 code table: %s\n", iB64Code);
 	iEncodedSize = b64_encode((unsigned char*) sTest, strlen(sTest),
-			(unsigned char*) sBufferEn);
-	printf("Encrypted text: %s\n", sBufferEn);
+			(unsigned char*) sBufferEn, 80);
+	printf("Encrypted text:\n");
+	printf("%s\n", sBufferEn);
 	printf("%d\n", iEncodedSize);
 	iDecodedSize = b64_decode((unsigned char*) sBufferEn, iEncodedSize,
 			(unsigned char*) sBufferDe);
@@ -96,7 +111,7 @@ int main(void)
 			"-----------------------------------------------------------------------\n");
 
 	int iTS = currentTimeMillis();
-	long iExperiments = 123456;
+	long iExperiments = 1234567;
 	int iProgressPrev = 0;
 	int iProgress = 0;
 	int iMsgSize = 80;
@@ -105,12 +120,12 @@ int main(void)
 		iCryptKey[0] = currentTimeMillis();
 		iCryptKey[1] = currentTimeMillis();
 		iCryptKey[2] = currentTimeMillis();
-		b64_init(iCryptKey, 3);
+		b64_set_key_i(iCryptKey, 3);
 		for (int i1 = 0; i1 < iMsgSize; ++i1) {
 			sBufferDe[i1] = (unsigned char) (i1 + i);
 		}
 		iEncodedSize = b64_encode((unsigned char*) sBufferDe, iMsgSize,
-				(unsigned char*) sBufferEn);
+				(unsigned char*) sBufferEn, 0);
 		iDecodedSize = b64_decode((unsigned char*) sBufferEn, iEncodedSize,
 				(unsigned char*) sBufferDe);
 		for (int i1 = 0; i1 < iMsgSize; ++i1) {
