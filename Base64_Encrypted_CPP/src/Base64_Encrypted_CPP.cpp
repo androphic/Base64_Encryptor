@@ -246,9 +246,6 @@ public:
 	void main() {
 		std::cout << "B64 encryptor demonstration" << std::endl;
 		int iCryptKey[] = { 128, 12345, 67890 };
-		b64_set_key_i(iCryptKey, 1);
-		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
-		std::cout << "B64 code table: " << iB64Code << std::endl;
 		char sTest[] =
 				"000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov.";
 		char sBufferDe[256];
@@ -257,14 +254,56 @@ public:
 		int iEncodedSize = 0;
 		int iDecodedSize = 0;
 		iSourceSize = strlen(sTest);
+
 		std::cout << "Plain text: " << sTest << std::endl;
 		std::cout << iSourceSize << std::endl;
-		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 80);
-		std::cout << "Crypt text: " << sBufferEn << std::endl;
-		std::cout << iEncodedSize << std::endl;
+		std::cout << "-----------------------------------------------------------------------" << std::endl;
+
+		b64_set_key_i(0, 0);
+		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
+		std::cout << "B64 code table: " << iB64Code << std::endl;
+		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 16);
+		std::cout << "Crypt text: \n" << sBufferEn << std::endl;
+		std::cout << std::dec << iEncodedSize << std::endl;
 		iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
 		std::cout << "Decrypt text: " << sBufferDe << std::endl;
-		std::cout << iDecodedSize << std::endl;
+		std::cout << std::dec << iDecodedSize << std::endl;
+		std::cout << "-----------------------------------------------------------------------" << std::endl;
+
+		b64_set_key_i(iCryptKey, 3);
+		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
+		std::cout << "B64 code table: " << iB64Code << std::endl;
+		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 32);
+		std::cout << "Crypt text: \n" << sBufferEn << std::endl;
+		std::cout << std::dec << iEncodedSize << std::endl;
+		iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
+		std::cout << "Decrypt text: " << sBufferDe << std::endl;
+		std::cout << std::dec << iDecodedSize << std::endl;
+		std::cout << "-----------------------------------------------------------------------" << std::endl;
+
+		b64_set_key_s("ThisIsTheKey1");
+		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
+		std::cout << "B64 code table: " << iB64Code << std::endl;
+		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 64);
+		std::cout << "Crypt text: \n" << sBufferEn << std::endl;
+		std::cout << std::dec << iEncodedSize << std::endl;
+		iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
+		std::cout << "Decrypt text: " << sBufferDe << std::endl;
+		std::cout << std::dec << iDecodedSize << std::endl;
+		std::cout << "-----------------------------------------------------------------------" << std::endl;
+
+		b64_set_key_i(iCryptKey, 1);
+		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
+		std::cout << "B64 code table: " << iB64Code << std::endl;
+		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 80);
+		std::cout << "Crypt text: \n" << sBufferEn << std::endl;
+		std::cout << std::dec << iEncodedSize << std::endl;
+		iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
+		std::cout << "Decrypt text: " << sBufferDe << std::endl;
+		std::cout << std::dec << iDecodedSize << std::endl;
+		std::cout << "-----------------------------------------------------------------------" << std::endl;
+
+
 		int iTS = static_cast<int>(std::time(nullptr));
 		long iExperiments = 1234567;
 		int iProgressPrev = 0;
