@@ -91,7 +91,7 @@ int main(void)
 	printf(
 			"-----------------------------------------------------------------------\n");
 	iCryptKeySize = 1;
-	printf("Encryption with int[] as a key:");
+	printf("Encryption with int[0] as a key:");
 	for (int i = 0; i < iCryptKeySize; ++i) {
 		printf(" 0x%x", iCryptKey[i]);
 	}

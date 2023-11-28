@@ -17,33 +17,35 @@ Advanced version
 - Standard Naming convention
 - Standard Base64 encoding and decoding with zero-key
 
-C Version
+Implementations:
+
+C 
 - Advanced version
 
-C++ version
+C++ 
 - Basic version
 
-C# version
+C# 
 - Basic version
 
-Go version
+Go 
 - Basic version
 
-Java version
+Java 
+- Advanced version
+
+Javascript
 - Basic version
 
-Javascript version
+Kotlin
 - Basic version
 
-Kotlin version
+Python
 - Basic version
 
-Python version
+Rust
 - Basic version
 
-Rust version
-- Basic version
-
-Scala version
+Scala
 - Basic version
 
