@@ -12,12 +12,12 @@ package com.androphic.base64.encryptor;
 import java.util.Arrays;
 
 public class B64Encryptor {
-	private static final char[] iB64Code = new char[65];
-	private static final int[] iB64Index = new int[65];
-	private static boolean bB64Initialized = false;
-	private static boolean bB64ToGlue = false;
+	private final char[] iB64Code = new char[65];
+	private final int[] iB64Index = new int[65];
+	private boolean bB64Initialized = false;
+	private boolean bB64ToGlue = false;
 
-	private static int mb64_int(int ch) {
+	private int mb64_int(int ch) {
 		if (ch == 61) {
 			return 64;
 		} else if (ch == 43) {
@@ -34,19 +34,19 @@ public class B64Encryptor {
 		return 255;
 	}
 
-	private static int mb64_rotl16(int n, int c) {
+	private int mb64_rotl16(int n, int c) {
 		n = n & 0xFFFF;
 		c &= 15;
 		return ((n << c) | (n >> (16 - c))) & 0xFFFF;
 	}
 
-	private static int mb64_rotr16(int n, int c) {
+	private int mb64_rotr16(int n, int c) {
 		n = n & 0xFFFF;
 		c &= 15;
 		return ((n >> c) | (n << (16 - c))) & 0xFFFF;
 	}
 
-	private static int mb64_int_from_index(int ch) {
+	private int mb64_int_from_index(int ch) {
 		int iCh = mb64_int(ch);
 		if (iCh == 255) {
 			return 255;
@@ -58,7 +58,7 @@ public class B64Encryptor {
 		}
 	}
 
-	private static void mb64_shuffle(int iKey) {
+	private void mb64_shuffle(int iKey) {
 		int iDither = 0x5aa5;
 		for (int i = 0; i < 64; ++i) {
 			iKey = mb64_rotl16(iKey, 1);
@@ -70,7 +70,7 @@ public class B64Encryptor {
 		}
 	}
 
-	private static void mb64_init_tables() {
+	private void mb64_init_tables() {
 		char[] sB64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 		for (int i = 0; i < 64; ++i) {
 			iB64Index[i] = i & 0xff;
@@ -79,13 +79,13 @@ public class B64Encryptor {
 		iB64Code[64] = 0;
 	}
 
-	private static void mb64_index_tables() {
+	private void mb64_index_tables() {
 		for (int i = 0; i < 64; ++i) {
 			iB64Index[mb64_int(iB64Code[i])] = i;
 		}
 	}
 
-	private static void b64_set_key_i(int[] iKey, int iSize) {
+	public void b64_set_key_i(int[] iKey, int iSize) {
 		mb64_init_tables();
 		if (iKey != null) {
 			for (int i = 0; i < iSize; ++i) {
@@ -97,7 +97,7 @@ public class B64Encryptor {
 		bB64Initialized = true;
 	}
 
-	private static void b64_set_key_s(String sKey) {
+	public void b64_set_key_s(String sKey) {
 		mb64_init_tables();
 		if (sKey != null) {
 			for (int i = 0; i < sKey.length(); ++i) {
@@ -109,15 +109,15 @@ public class B64Encryptor {
 		bB64Initialized = true;
 	}
 
-	private static int b64_enc_size(int in_size) {
+	public int b64_enc_size(int in_size) {
 		return ((in_size - 1) / 3) * 4 + 4;
 	}
 
-	private static int b64_dec_size(int in_size) {
+	public int b64_dec_size(int in_size) {
 		return ((3 * in_size) / 4);
 	}
 
-	private static int b64_encode(byte[] in, int in_len, byte[] out, int iTextLineLength) {
+	public int b64_encode(byte[] in, int in_len, byte[] out, int iTextLineLength) {
 		if (!bB64Initialized) {
 			b64_set_key_i(null, 0);
 		}
@@ -181,7 +181,7 @@ public class B64Encryptor {
 		return k;
 	}
 
-	private static int b64_decode(byte[] in, int in_len, byte[] out) {
+	public int b64_decode(byte[] in, int in_len, byte[] out) {
 		if (!bB64Initialized) {
 			b64_set_key_i(null, 0);
 		}
@@ -228,13 +228,14 @@ public class B64Encryptor {
 	}
 
 	public static void main(String[] args) {
+		B64Encryptor o = new B64Encryptor();
 		System.out.println("B64 encryptor demonstration");
 		for (int i = 0; i < 32; ++i) {
-			System.out.print(" " + mb64_rotl16(0xa5, i) + ", ");
+			System.out.print(" " + o.mb64_rotl16(0xa5, i) + ", ");
 		}
 		System.out.println();
 		for (int i = 0; i < 32; ++i) {
-			System.out.print(" " + mb64_rotr16(0xa5, i) + ", ");
+			System.out.print(" " + o.mb64_rotr16(0xa5, i) + ", ");
 		}
 		System.out.println();
 		byte[] sTest = "000000000000000000000000000000000000000000000000000000000000000000000 Test 1234567890. Androphic. Tofig Kareemov."
@@ -251,53 +252,53 @@ public class B64Encryptor {
 		System.out.println(iSourceSize);
 		System.out.println("-----------------------------------------------------------------------");
 		System.out.println("Standard Base64 encoding");
-		b64_set_key_i(null, 0);
-		System.out.println("B64 code table: " + Arrays.toString(iB64Code));
-		System.out.println("B64 code index table: " + Arrays.toString(iB64Index));
-		iEncodedSize = b64_encode(sTest, sTest.length, sBufferEn, 16);
+		o.b64_set_key_i(null, 0);
+		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
+		System.out.println("B64 code index table: " + Arrays.toString(o.iB64Index));
+		iEncodedSize = o.b64_encode(sTest, sTest.length, sBufferEn, 16);
 		System.out.println("Standard Base64 encoded text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedSize);
-		iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
+		iDecodedSize = o.b64_decode(sBufferEn, iEncodedSize, sBufferDe);
 		System.out.println("Standard Base64 decoded text:");
 		System.out.println(new String(sBufferDe));
 		System.out.println(iDecodedSize);
 		System.out.println("-----------------------------------------------------------------------");
 		System.out.println("Encryption with int[] as key");
-		b64_set_key_i(iCryptKey, iCryptKey.length);
-		System.out.println("B64 code table: " + Arrays.toString(iB64Code));
-		System.out.println("B64 code index table: " + Arrays.toString(iB64Index));
-		iEncodedSize = b64_encode(sTest, sTest.length, sBufferEn, 32);
+		o.b64_set_key_i(iCryptKey, iCryptKey.length);
+		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
+		System.out.println("B64 code index table: " + Arrays.toString(o.iB64Index));
+		iEncodedSize = o.b64_encode(sTest, sTest.length, sBufferEn, 32);
 		System.out.println("Encrypted text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedSize);
-		iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
+		iDecodedSize = o.b64_decode(sBufferEn, iEncodedSize, sBufferDe);
 		System.out.println("Decrypted text:");
 		System.out.println(new String(sBufferDe));
 		System.out.println(iDecodedSize);
 		System.out.println("-----------------------------------------------------------------------");
 		System.out.println("Encryption with String as key");
-		b64_set_key_s("ThisIsTheKey1");
-		System.out.println("B64 code table: " + Arrays.toString(iB64Code));
-		System.out.println("B64 code index table: " + Arrays.toString(iB64Index));
-		iEncodedSize = b64_encode(sTest, sTest.length, sBufferEn, 64);
+		o.b64_set_key_s("ThisIsTheKey1");
+		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
+		System.out.println("B64 code index table: " + Arrays.toString(o.iB64Index));
+		iEncodedSize = o.b64_encode(sTest, sTest.length, sBufferEn, 64);
 		System.out.println("Encrypted text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedSize);
-		iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
+		iDecodedSize = o.b64_decode(sBufferEn, iEncodedSize, sBufferDe);
 		System.out.println("Decrypted text:");
 		System.out.println(new String(sBufferDe));
 		System.out.println(iDecodedSize);
 		System.out.println("-----------------------------------------------------------------------");
 		System.out.println("Encryption with int[0] as key");
-		b64_set_key_i(iCryptKey, 1);
-		System.out.println("B64 code table: " + Arrays.toString(iB64Code));
-		System.out.println("B64 code index table: " + Arrays.toString(iB64Index));
-		iEncodedSize = b64_encode(sTest, sTest.length, sBufferEn, 80);
+		o.b64_set_key_i(iCryptKey, 1);
+		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
+		System.out.println("B64 code index table: " + Arrays.toString(o.iB64Index));
+		iEncodedSize = o.b64_encode(sTest, sTest.length, sBufferEn, 80);
 		System.out.println("Encrypted text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedSize);
-		iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
+		iDecodedSize = o.b64_decode(sBufferEn, iEncodedSize, sBufferDe);
 		System.out.println("Decrypted text:");
 		System.out.println(new String(sBufferDe));
 		System.out.println(iDecodedSize);
@@ -313,12 +314,12 @@ public class B64Encryptor {
 			iCryptKey[0] = (int) System.currentTimeMillis();
 			iCryptKey[1] = (int) System.currentTimeMillis();
 			iCryptKey[2] = (int) System.currentTimeMillis();
-			b64_set_key_i(iCryptKey, 3);
+			o.b64_set_key_i(iCryptKey, 3);
 			for (int i1 = 0; i1 < iMsgSize; ++i1) {
 				sBufferDe[i1] = (byte) (i1 + i);
 			}
-			iEncodedSize = b64_encode(sBufferDe, iMsgSize, sBufferEn, 0);
-			iDecodedSize = b64_decode(sBufferEn, iEncodedSize, sBufferDe);
+			iEncodedSize = o.b64_encode(sBufferDe, iMsgSize, sBufferEn, 0);
+			iDecodedSize = o.b64_decode(sBufferEn, iEncodedSize, sBufferDe);
 			for (int i1 = 0; i1 < iMsgSize; ++i1) {
 				if (sBufferDe[i1] != (byte) (i1 + i)) {
 					System.out.println("ERR: " + i + ", " + new String(sBufferEn));
