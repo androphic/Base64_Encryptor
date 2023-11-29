@@ -29,7 +29,7 @@ C#
 - Advanced version
 
 Go 
-- Basic version
+- Advanced version
 
 Java 
 - Advanced version
