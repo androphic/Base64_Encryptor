@@ -73,18 +73,20 @@ func (b *B64Encryptor) mb64Shuffle(iKey int) {
 	}
 }
 
-func (b *B64Encryptor) mb64InitTables() {
+func (b64 *B64Encryptor) mb64InitTables() {
 	sB64Chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+	b64.bB64ToGlue = false
+	b64.bB64Initialized = false
 	for i := 0; i < 64; i++ {
-		b.b64Index[i] = (byte)(i & 0xff)
-		b.b64Code[i] = sB64Chars[i]
+		b64.b64Index[i] = (byte)(i & 0xff)
+		b64.b64Code[i] = sB64Chars[i]
 	}
-	b.b64Code[64] = 0
+	b64.b64Code[64] = 0
 }
 
-func (b *B64Encryptor) mB64IndexTables() {
+func (b64 *B64Encryptor) mB64IndexTables() {
 	for i := 0; i < 64; i++ {
-		b.b64Index[b.mb64Int(b.b64Code[i])] = byte(i)
+		b64.b64Index[b64.mb64Int(b64.b64Code[i])] = byte(i)
 	}
 }
 

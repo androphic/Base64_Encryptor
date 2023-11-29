@@ -76,6 +76,8 @@ private:
 	void mb64_init_tables() {
 		const char *sB64Chars =
 				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+		bB64ToGlue = 0;
+		bB64Initialized = 0;
 		for (int i = 0; i < 64; ++i) {
 			iB64Index[i] = i & 0xff;
 			iB64Code[i] = sB64Chars[i];
@@ -260,7 +262,6 @@ public:
 		std::cout << "-----------------------------------------------------------------------" << std::endl;
 
 		b64_set_key_i(0, 0);
-		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
 		std::cout << "B64 code table: " << iB64Code << std::endl;
 		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 16);
 		std::cout << "Crypt text: \n" << sBufferEn << std::endl;
@@ -271,7 +272,7 @@ public:
 		std::cout << "-----------------------------------------------------------------------" << std::endl;
 
 		b64_set_key_i(iCryptKey, 3);
-		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
+		std::cout << "Crypt key: " << iCryptKey[0] << " " << iCryptKey[1] << " " << iCryptKey[2] << std::endl;
 		std::cout << "B64 code table: " << iB64Code << std::endl;
 		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 32);
 		std::cout << "Crypt text: \n" << sBufferEn << std::endl;
@@ -282,7 +283,7 @@ public:
 		std::cout << "-----------------------------------------------------------------------" << std::endl;
 
 		b64_set_key_s("ThisIsTheKey1");
-		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
+		std::cout << "Crypt key: " << "ThisIsTheKey1" << std::endl;
 		std::cout << "B64 code table: " << iB64Code << std::endl;
 		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 64);
 		std::cout << "Crypt text: \n" << sBufferEn << std::endl;
@@ -293,7 +294,7 @@ public:
 		std::cout << "-----------------------------------------------------------------------" << std::endl;
 
 		b64_set_key_i(iCryptKey, 1);
-		std::cout << "Crypt key: 0x" << std::hex << iCryptKey << std::endl;
+		std::cout << "Crypt key: 0x" << std::hex << iCryptKey[0] << std::endl;
 		std::cout << "B64 code table: " << iB64Code << std::endl;
 		iEncodedSize = b64_encode(sTest, iSourceSize, sBufferEn, 80);
 		std::cout << "Crypt text: \n" << sBufferEn << std::endl;

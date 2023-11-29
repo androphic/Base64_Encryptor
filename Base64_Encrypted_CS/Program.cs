@@ -72,6 +72,8 @@ using System.Text;
         private void Mb64InitTables()
         {
             char[] sB64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".ToCharArray();
+            bB64ToGlue = false;
+            bB64Initialized = false;
             for (int i = 0; i < 64; ++i)
             {
                 iB64Index[i] = i & 0xff;

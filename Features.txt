@@ -35,7 +35,7 @@ Java
 - Advanced version
 
 Javascript
-- Basic version
+- Advanced version
 
 Kotlin
 - Basic version
