@@ -54,7 +54,7 @@ public class B64Encryptor {
 		if (ch == 61) {
 			return 64;
 		} else {
-			return iB64Index[mb64_int(ch)];
+			return iB64Index[iCh];
 		}
 	}
 
