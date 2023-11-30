@@ -38,7 +38,7 @@ Javascript
 - Advanced version
 
 Kotlin
-- Basic version
+- Advanced version
 
 Python
 - Basic version
