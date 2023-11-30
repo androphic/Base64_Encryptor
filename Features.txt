@@ -41,7 +41,7 @@ Kotlin
 - Advanced version
 
 Python
-- Basic version
+- Advanced version
 
 Rust
 - Basic version

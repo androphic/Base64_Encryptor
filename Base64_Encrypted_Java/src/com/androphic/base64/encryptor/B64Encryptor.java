@@ -72,6 +72,8 @@ public class B64Encryptor {
 
 	private void mb64_init_tables() {
 		char[] sB64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
+		bB64ToGlue = false;
+		bB64Initialized = false;
 		for (int i = 0; i < 64; ++i) {
 			iB64Index[i] = i & 0xff;
 			iB64Code[i] = sB64Chars[i];
@@ -173,7 +175,7 @@ public class B64Encryptor {
 				if (iTextLineCount >= iTextLineLength) {
 					out[k] = '\n';
 					++k;
-					iTextLineCount = 0;
+//					iTextLineCount = 0;
 				}
 			}
 		}
@@ -246,7 +248,7 @@ public class B64Encryptor {
 		int iEncodedSize = 0;
 		int iDecodedSize = 0;
 		iSourceSize = sTest.length;
-		int[] iCryptKey = new int[] { 128, 12345, 67890 }; // (int) System.currentTimeMillis();
+		int[] iCryptKey = new int[] { 128, 12345, 67890 };
 
 		System.out.println("Plain text: " + new String(sTest));
 		System.out.println(iSourceSize);
@@ -266,7 +268,7 @@ public class B64Encryptor {
 		System.out.println("-----------------------------------------------------------------------");
 		sBufferDe = new byte[256];
 		sBufferEn = new byte[256 * 4 / 3 + 1];
-		System.out.println("Encryption with int[] as key");
+		System.out.println("Encryption with int[] as key: " + Arrays.toString(iCryptKey));
 		o.b64_set_key_i(iCryptKey, iCryptKey.length);
 		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
 		System.out.println("B64 code index table: " + Arrays.toString(o.iB64Index));
@@ -281,7 +283,7 @@ public class B64Encryptor {
 		System.out.println("-----------------------------------------------------------------------");
 		sBufferDe = new byte[256];
 		sBufferEn = new byte[256 * 4 / 3 + 1];
-		System.out.println("Encryption with String as key");
+		System.out.println("Encryption with String as key: " + "ThisIsTheKey1");
 		o.b64_set_key_s("ThisIsTheKey1");
 		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
 		System.out.println("B64 code index table: " + Arrays.toString(o.iB64Index));
@@ -296,7 +298,7 @@ public class B64Encryptor {
 		System.out.println("-----------------------------------------------------------------------");
 		sBufferDe = new byte[256];
 		sBufferEn = new byte[256 * 4 / 3 + 1];
-		System.out.println("Encryption with int[0] as key");
+		System.out.println("Encryption with int[0] as key: " + iCryptKey[0]);
 		o.b64_set_key_i(iCryptKey, 1);
 		System.out.println("B64 code table: " + Arrays.toString(o.iB64Code));
 		System.out.println("B64 code index table: " + Arrays.toString(o.iB64Index));
