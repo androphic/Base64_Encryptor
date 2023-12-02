@@ -20,32 +20,32 @@ Advanced version
 Implementations:
 
 C 
-- Advanced version
+- version 2
 
 C++ 
-- Advanced version
+- version 2
 
 C# 
-- Advanced version
+- version 2
 
 Go 
-- Advanced version
+- version 2
 
 Java 
-- Advanced version
+- version 3
 
 Javascript
-- Advanced version
+- version 2
 
 Kotlin
-- Advanced version
+- version 2
 
 Python
-- Advanced version
+- version 2
 
 Rust
-- Basic version
+- version 1
 
 Scala
-- Basic version
+- version 1
 
