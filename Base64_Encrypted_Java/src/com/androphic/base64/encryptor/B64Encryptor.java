@@ -24,9 +24,9 @@ public class B64Encryptor {
 //	public static final String S_ALPHABET_XX = "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 //	public static final String S_ALPHABET_BASH = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@_";
 
-	public static final int I_B64_LENGTH_STANDARD = 0;
-	public static final int I_B64_LENGTH_MIME = 76;
-	public static final int I_B64_LENGTH_PEM = 64;
+	public static final int I_LENGTH_STANDARD = 0;
+	public static final int I_LENGTH_MIME = 76;
+	public static final int I_LENGTH_PEM = 64;
 
 	private char[] cAlphabet = new char[64];
 	private int[] iAlphabetIndex = new int[64];
@@ -322,7 +322,7 @@ public class B64Encryptor {
 		o.setEncryption(null, 0, S_ALPHABET_STANDARD);
 		System.out.println("B64 code table: " + Arrays.toString(o.cAlphabet));
 		System.out.println("B64 code index table: " + Arrays.toString(o.iAlphabetIndex));
-		iEncodedSize = o.encrypt(sTest, sTest.length, sBufferEn, I_B64_LENGTH_STANDARD, true);
+		iEncodedSize = o.encrypt(sTest, sTest.length, sBufferEn, I_LENGTH_STANDARD, true);
 		System.out.println("Standard Base64 encoded text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedSize);
@@ -337,7 +337,7 @@ public class B64Encryptor {
 		o.setEncryption(iCryptKey, iCryptKey.length, S_ALPHABET_URL);
 		System.out.println("B64 code table: " + Arrays.toString(o.cAlphabet));
 		System.out.println("B64 code index table: " + Arrays.toString(o.iAlphabetIndex));
-		iEncodedSize = o.encrypt(sTest, sTest.length, sBufferEn, I_B64_LENGTH_PEM, false);
+		iEncodedSize = o.encrypt(sTest, sTest.length, sBufferEn, I_LENGTH_PEM, false);
 		System.out.println("Encrypted text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedSize);
@@ -352,7 +352,7 @@ public class B64Encryptor {
 		o.setEncryption("ThisIsTheKey1", S_ALPHABET_QWERTY);
 		System.out.println("B64 code table: " + Arrays.toString(o.cAlphabet));
 		System.out.println("B64 code index table: " + Arrays.toString(o.iAlphabetIndex));
-		iEncodedSize = o.encrypt(sTest, sTest.length, sBufferEn, I_B64_LENGTH_MIME, false);
+		iEncodedSize = o.encrypt(sTest, sTest.length, sBufferEn, I_LENGTH_MIME, false);
 		System.out.println("Encrypted text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedSize);
@@ -393,7 +393,7 @@ public class B64Encryptor {
 			for (int i1 = 0; i1 < iMsgSize; ++i1) {
 				sBufferDe[i1] = (byte) (i1 + i);
 			}
-			iEncodedSize = o.encrypt(sBufferDe, iMsgSize, sBufferEn, I_B64_LENGTH_STANDARD, (iCryptKey[2] & 1) == 1);
+			iEncodedSize = o.encrypt(sBufferDe, iMsgSize, sBufferEn, I_LENGTH_STANDARD, (iCryptKey[2] & 1) == 1);
 			iDecodedSize = o.decrypt(sBufferEn, iEncodedSize, sBufferDe);
 			for (int i1 = 0; i1 < iMsgSize; ++i1) {
 				if (sBufferDe[i1] != (byte) (i1 + i)) {
