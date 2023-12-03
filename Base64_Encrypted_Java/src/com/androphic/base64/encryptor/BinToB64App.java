@@ -95,6 +95,7 @@ public class BinToB64App {
 			return;
 		}
 		File outputFile = new File(outputFileName);
+		System.out.println("Output file: " + outputFileName);
 		try {
 			if ("-e".equals(flag)) {
 				encodeBase64(inputFile, outputFile, sKey);
@@ -104,5 +105,6 @@ public class BinToB64App {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("Done.");
 	}
 }
