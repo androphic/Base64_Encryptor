@@ -1,3 +1,12 @@
+/*
+ ============================================================================
+ Name        : BinToB64App.java
+ Author      : Tofig Kareemov
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Base64 Encryptor in Java Application
+ ============================================================================
+ */
 package com.androphic.base64.encryptor;
 
 //# For encoding
@@ -6,66 +15,73 @@ package com.androphic.base64.encryptor;
 //
 //# For decoding
 //javac BinToB64App.java
-//java BinToB64App -d input_file.b64
+//java BinToB64App -d input_file.c64
 
 import java.io.*;
-import java.util.Base64;
 
 public class BinToB64App {
 
-	private static final int BUFFER_SIZE = 4096;
+	// Must be divide able by 12
+	private static final int BUFFER_SIZE = (4096 / 12) * 12;
+	// .
 
-	private static void encodeBase64(File inputFile, File outputFile) {
+	private static void encodeBase64(File inputFile, File outputFile, String sKey) {
 		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(inputFile));
 				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-			Base64.Encoder encoder = Base64.getEncoder();
-
-			byte[] buffer = new byte[BUFFER_SIZE];
+			B64Encryptor oEnc = new B64Encryptor();
+			byte[] Input = new byte[BUFFER_SIZE];
+			byte[] Output = new byte[BUFFER_SIZE * 3 / 2];
 			int bytesRead;
-
-			while ((bytesRead = bis.read(buffer)) != -1) {
-//                byte[] encodedBytes = encoder.encode(buffer, 0, bytesRead);
-//                bos.write(encodedBytes);
+			oEnc.setEncryption(sKey, B64Encryptor.S_ALPHABET_QWERTY);
+			while ((bytesRead = bis.read(Input)) != -1) {
+				int iEncodedBytes = 0;
+				iEncodedBytes = oEnc.encrypt(Input, bytesRead, Output, B64Encryptor.I_LINE_MIME, true);
+				bos.write(Output, 0, iEncodedBytes);
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static void decodeBase64(File inputFile, File outputFile) {
-		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(inputFile));
-				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-
-			Base64.Decoder decoder = Base64.getDecoder();
-			byte[] buffer = new byte[BUFFER_SIZE];
-			int bytesRead;
-
-			while ((bytesRead = bis.read(buffer)) != -1) {
-//                byte[] decodedBytes = decoder.decode(buffer, 0, bytesRead);
-//                bos.write(decodedBytes);
+	private static void decodeBase64(File inputFile, File outputFile, String sKey) {
+		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+			B64Encryptor oEnc = new B64Encryptor();
+			BufferedReader reader;
+			byte[] Output = new byte[BUFFER_SIZE];
+			reader = new BufferedReader(new FileReader(inputFile));
+			oEnc.setEncryption(sKey, B64Encryptor.S_ALPHABET_QWERTY);
+			String line = reader.readLine();
+			while (line != null) {
+				int iLen = line.length();
+				if (iLen <= B64Encryptor.I_LINE_MIME) {
+					int iEncodedBytes = oEnc.decrypt(line.getBytes(), iLen, Output);
+					bos.write(Output, 0, iEncodedBytes);
+				}
+				line = reader.readLine();
 			}
-
+			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.err.println("Usage: java BinaryToBase64 <-e/-d> <input_file>");
+		if (args.length < 2) {
+			System.err.println("Usage: java -jar b2c64.jar <-e/-d> <input_file> <crypt_key_text>");
 			System.exit(1);
 		}
-
 		String flag = args[0];
 		String inputFileName = args[1];
+		String sKey = null;
+		if (args.length >= 3) {
+			sKey = args[2];
+		}
 		String outputFileName;
-
 		if ("-e".equals(flag)) {
-			outputFileName = inputFileName + ".b64";
+			outputFileName = inputFileName + ".c64";
 		} else if ("-d".equals(flag)) {
-			if (!inputFileName.endsWith(".b64")) {
-				System.err.println("Error: Decoding requires a '.b64' file.");
+			if (!inputFileName.endsWith(".c64")) {
+				System.err.println("Error: Decoding requires a '.c64' file.");
 				System.exit(1);
 			}
 			outputFileName = inputFileName.substring(0, inputFileName.length() - 4);
@@ -74,15 +90,13 @@ public class BinToB64App {
 			System.exit(1);
 			return;
 		}
-
 		File inputFile = new File(inputFileName);
 		File outputFile = new File(outputFileName);
-
 		try {
 			if ("-e".equals(flag)) {
-				encodeBase64(inputFile, outputFile);
+				encodeBase64(inputFile, outputFile, sKey);
 			} else if ("-d".equals(flag)) {
-				decodeBase64(inputFile, outputFile);
+				decodeBase64(inputFile, outputFile, sKey);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -23,9 +23,9 @@ public class B64Encryptor {
 	public static final String S_ALPHABET_XX = "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz=";
 	public static final String S_ALPHABET_BASH = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@_=";
 
-	public static final int I_LENGTH_STANDARD = 0;
-	public static final int I_LENGTH_MIME = 76;
-	public static final int I_LENGTH_PEM = 64;
+	public static final int I_LINE_STANDARD = 0;
+	public static final int I_LINE_MIME = 76;
+	public static final int I_LINE_PEM = 64;
 
 	private char[] cAlphabet = new char[65];
 	private final int[] iAlphabetIndex = new int[128];
@@ -33,7 +33,6 @@ public class B64Encryptor {
 	private boolean bToGlue = false;
 
 	private class State {
-		int iOutLen = 0; // Output Lenght
 		int[] iBuf = new int[4]; // Processing group buffer
 		int iB = 0; // Processing group index
 		int iDR = 0xa55a; // Dither rotating right
@@ -42,7 +41,6 @@ public class B64Encryptor {
 		int iLineLen = 0; // Current text line length
 
 		private void init() {
-			iOutLen = 0;
 			iBuf[0] = 0;
 			iBuf[1] = 0;
 			iBuf[2] = 0;
@@ -159,9 +157,9 @@ public class B64Encryptor {
 			for (int i = 0; i < sKey.length(); ++i) {
 				shuffleCodeTable(0 | sKey.charAt(i) | (sKey.charAt(i) << 8));
 			}
-			indexTables();
 			bToGlue = true;
 		}
+		indexTables();
 		bInitialized = true;
 	}
 
@@ -209,6 +207,7 @@ public class B64Encryptor {
 		}
 		iLineMaxLen = (iLineMaxLen / 4) * 4;
 		State o = oEncState;
+		int k = 0;
 		for (int i = 0; i < iInLen; i++) {
 			if (bToGlue) {
 				o.iG = ((iIn[i] ^ o.iDL & 0xff) & 0xff);
@@ -220,19 +219,19 @@ public class B64Encryptor {
 			}
 			++o.iB;
 			if (o.iB == 3) {
-				iOut[o.iOutLen + 0] = (byte) cAlphabet[(o.iBuf[0] & 255) >> 2];
-				iOut[o.iOutLen + 1] = (byte) cAlphabet[((o.iBuf[0] & 0x03) << 4) | ((o.iBuf[1] & 0xF0) >> 4)];
-				iOut[o.iOutLen + 2] = (byte) cAlphabet[((o.iBuf[1] & 0x0F) << 2) | ((o.iBuf[2] & 0xC0) >> 6)];
-				iOut[o.iOutLen + 3] = (byte) cAlphabet[o.iBuf[2] & 0x3F];
+				iOut[k + 0] = (byte) cAlphabet[(o.iBuf[0] & 255) >> 2];
+				iOut[k + 1] = (byte) cAlphabet[((o.iBuf[0] & 0x03) << 4) | ((o.iBuf[1] & 0xF0) >> 4)];
+				iOut[k + 2] = (byte) cAlphabet[((o.iBuf[1] & 0x0F) << 2) | ((o.iBuf[2] & 0xC0) >> 6)];
+				iOut[k + 3] = (byte) cAlphabet[o.iBuf[2] & 0x3F];
 				o.iB = 0;
-				o.iOutLen += 4;
+				k += 4;
+				o.iLineLen += 4;
 				if (iLineMaxLen > 0) {
-					o.iLineLen += 4;
 					if (o.iLineLen >= iLineMaxLen) {
-						iOut[o.iOutLen] = '\r';
-						++o.iOutLen;
-						iOut[o.iOutLen] = '\n';
-						++o.iOutLen;
+						iOut[k] = '\r';
+						++k;
+						iOut[k] = '\n';
+						++k;
 						o.iLineLen = 0;
 					}
 				}
@@ -242,25 +241,29 @@ public class B64Encryptor {
 			if (o.iB == 1) {
 				o.iBuf[1] = 0;
 			}
-			iOut[o.iOutLen + 0] = (byte) cAlphabet[(o.iBuf[0] & 255) >> 2];
-			iOut[o.iOutLen + 1] = (byte) cAlphabet[((o.iBuf[0] & 0x03) << 4) | ((o.iBuf[1] & 0xF0) >> 4)];
-			o.iOutLen += 2;
+			iOut[k + 0] = (byte) cAlphabet[(o.iBuf[0] & 255) >> 2];
+			iOut[k + 1] = (byte) cAlphabet[((o.iBuf[0] & 0x03) << 4) | ((o.iBuf[1] & 0xF0) >> 4)];
+			k += 2;
+			o.iLineLen += 2;
 			if (o.iB == 2) {
-				iOut[o.iOutLen] = (byte) cAlphabet[((o.iBuf[1] & 0x0F) << 2)];
-				++o.iOutLen;
+				iOut[k] = (byte) cAlphabet[((o.iBuf[1] & 0x0F) << 2)];
+				++k;
+				++o.iLineLen;
 			} else {
 				if (bPadding) {
-					iOut[o.iOutLen] = (byte) (cAlphabet[64] % 0xff);
-					++o.iOutLen;
+					iOut[k] = (byte) (cAlphabet[64] % 0xff);
+					++k;
+					++o.iLineLen;
 				}
 			}
 			if (bPadding) {
-				iOut[o.iOutLen] = (byte) (cAlphabet[64] % 0xff);
-				++o.iOutLen;
+				iOut[k] = (byte) (cAlphabet[64] % 0xff);
+				++k;
+				++o.iLineLen;
 			}
 		}
-		iOut[o.iOutLen] = '\0';
-		return o.iOutLen;
+		iOut[k] = '\0';
+		return k;
 	}
 
 	public int decrypt(byte[] in, int in_len, byte[] out) {
@@ -268,23 +271,26 @@ public class B64Encryptor {
 		if (!bInitialized) {
 			setEncryption(null, 0, null);
 		}
+		int k = 0;
 		for (int i = 0; i < in_len; ++i) {
 			o.iBuf[o.iB] = iAlphabetIndex[in[i]];
 			if (o.iBuf[o.iB] != 255) {
 				++o.iB;
 				if (o.iB == 4) {
-					if (o.iBuf[1] != 64) {
-						out[o.iOutLen + 0] = (byte) (((o.iBuf[0] & 255) << 2) | ((o.iBuf[1] & 0x30) >> 4));
-						if (o.iBuf[2] != 64) {
-							out[o.iOutLen + 1] = (byte) (((o.iBuf[1] & 0x0F) << 4) | ((o.iBuf[2] & 0x3C) >> 2));
-							if (o.iBuf[3] != 64) {
-								out[o.iOutLen + 2] = (byte) (((o.iBuf[2] & 0x03) << 6) | (o.iBuf[3]));
-								o.iOutLen += 3;
+					if (o.iBuf[0] != 64) {
+						if (o.iBuf[1] != 64) {
+							out[k + 0] = (byte) (((o.iBuf[0] & 255) << 2) | ((o.iBuf[1] & 0x30) >> 4));
+							if (o.iBuf[2] != 64) {
+								out[k + 1] = (byte) (((o.iBuf[1] & 0x0F) << 4) | ((o.iBuf[2] & 0x3C) >> 2));
+								if (o.iBuf[3] != 64) {
+									out[k + 2] = (byte) (((o.iBuf[2] & 0x03) << 6) | (o.iBuf[3]));
+									k += 3;
+								} else {
+									k += 2;
+								}
 							} else {
-								o.iOutLen += 2;
+								k += 1;
 							}
-						} else {
-							o.iOutLen += 1;
 						}
 					}
 					o.iB = 0;
@@ -292,23 +298,23 @@ public class B64Encryptor {
 			}
 		}
 		if (o.iB >= 2) {
-			out[o.iOutLen] = (byte) (((o.iBuf[0] & 255) << 2) | ((o.iBuf[1] & 0x30) >> 4));
-			++o.iOutLen;
+			out[k] = (byte) (((o.iBuf[0] & 255) << 2) | ((o.iBuf[1] & 0x30) >> 4));
+			++k;
 		}
 		if (o.iB == 3) {
-			out[o.iOutLen] = (byte) (((o.iBuf[1] & 0x0F) << 4) | ((o.iBuf[2] & 0x3C) >> 2));
-			++o.iOutLen;
+			out[k] = (byte) (((o.iBuf[1] & 0x0F) << 4) | ((o.iBuf[2] & 0x3C) >> 2));
+			++k;
 		}
 		if (bToGlue) {
-			for (int i = 0; i < o.iOutLen; ++i) {
+			for (int i = 0; i < k; ++i) {
 				o.iG = out[i] & 0xff;
 				out[i] = (byte) ((out[i] ^ o.iDL & 0xff) & 0xff);
 				o.iDR = rotr16(o.iDR, 1) ^ o.iG;
 				o.iDL = rotl16(o.iDL, 1) ^ o.iDR;
 			}
 		}
-		out[o.iOutLen] = '\0';
-		return o.iOutLen;
+		out[k] = '\0';
+		return k;
 	}
 
 	public static void main(String[] args) {
@@ -354,7 +360,7 @@ public class B64Encryptor {
 		o.setEncryption(iCryptKey, iCryptKey.length, S_ALPHABET_URL);
 		System.out.println("B64 code table: " + Arrays.toString(o.cAlphabet));
 		System.out.println("B64 code index table: " + Arrays.toString(o.iAlphabetIndex));
-		iEncodedLen = o.encrypt(sTest, sTest.length, sBufferEn, I_LENGTH_PEM, false);
+		iEncodedLen = o.encrypt(sTest, sTest.length, sBufferEn, I_LINE_PEM, false);
 		System.out.println("Encrypted text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedLen);
@@ -369,7 +375,7 @@ public class B64Encryptor {
 		o.setEncryption("ThisIsTheKey1", S_ALPHABET_QWERTY);
 		System.out.println("B64 code table: " + Arrays.toString(o.cAlphabet));
 		System.out.println("B64 code index table: " + Arrays.toString(o.iAlphabetIndex));
-		iEncodedLen = o.encrypt(sTest, sTest.length, sBufferEn, I_LENGTH_MIME, false);
+		iEncodedLen = o.encrypt(sTest, sTest.length, sBufferEn, I_LINE_MIME, false);
 		System.out.println("Encrypted text:");
 		System.out.println(new String(sBufferEn));
 		System.out.println(iEncodedLen);
@@ -415,13 +421,13 @@ public class B64Encryptor {
 			iEncodedLen = o.encrypt(sBufferDe, iMsgSize, sBufferEn, iLineLength, bPadding);
 			iDecodedLen = o.decrypt(sBufferEn, iEncodedLen, sBufferDe);
 			int iCalc = o.calcEncryptedLen(iMsgSize, iLineLength, bPadding);
-			if (iCalc != iEncodedLen) {
+			if (iCalc != (iEncodedLen)) {
 				System.out.println("ERR: Enc size calc is not correct, expected " + iCalc + "( " + iMsgSize + ", "
 						+ iLineLength + ", " + bPadding + ")" + ", real " + iEncodedLen);
 				return;
 			}
 			iCalc = o.calcDecryptedLen(iEncodedLen, iLineLength, bPadding);
-			if (!((iCalc >= iDecodedLen) && (iCalc < iDecodedLen + 3))) {
+			if (!((iCalc >= iDecodedLen) && (iCalc < (iDecodedLen + 3)))) {
 				System.out.println("ERR: Dec size calc is not correct, expected " + iCalc + "( " + iEncodedLen + ", "
 						+ iLineLength + ", " + bPadding + ")" + ", real " + iDecodedLen);
 				return;
