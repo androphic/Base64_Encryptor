@@ -21,9 +21,7 @@ import java.io.*;
 
 public class BinToB64App {
 
-	// Must be divide able by 12
-	private static final int BUFFER_SIZE = (4096 / 12) * 12;
-	// .
+	private static final int BUFFER_SIZE = 4096 * 3; // Must be File Cluster size * 3 for speed and no inter-padding
 
 	private static void encodeBase64(File inputFile, File outputFile, String sKey) {
 		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(inputFile));
@@ -91,6 +89,11 @@ public class BinToB64App {
 			return;
 		}
 		File inputFile = new File(inputFileName);
+		if (!inputFile.exists()) {
+			System.err.println("Input file \"" + inputFileName + "\" doesn't exist.");
+			System.exit(1);
+			return;
+		}
 		File outputFile = new File(outputFileName);
 		try {
 			if ("-e".equals(flag)) {
