@@ -19,21 +19,21 @@ package com.androphic.base64.encryptor;
 
 import java.io.*;
 
-public class BinToB64App {
+public class BinToC64App {
 
 	private static final int BUFFER_SIZE = 4096 * 3; // Must be File Cluster size * 3 for speed and no inter-padding
 
 	private static void encodeBase64(File inputFile, File outputFile, String sKey) {
 		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(inputFile));
 				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-			B64Encryptor oEnc = new B64Encryptor();
+			C64 oEnc = new C64();
 			byte[] Input = new byte[BUFFER_SIZE];
 			byte[] Output = new byte[BUFFER_SIZE * 3 / 2];
 			int bytesRead;
-			oEnc.setEncryption(sKey, B64Encryptor.S_ALPHABET_QWERTY);
+			oEnc.setEncryption(sKey, C64.S_ALPHABET_QWERTY);
 			while ((bytesRead = bis.read(Input)) != -1) {
 				int iEncodedBytes = 0;
-				iEncodedBytes = oEnc.encrypt(Input, bytesRead, Output, B64Encryptor.I_LINE_MIME, true);
+				iEncodedBytes = oEnc.encrypt(Input, bytesRead, Output, C64.I_LINE_MIME, true);
 				bos.write(Output, 0, iEncodedBytes);
 			}
 		} catch (IOException e) {
@@ -43,15 +43,15 @@ public class BinToB64App {
 
 	private static void decodeBase64(File inputFile, File outputFile, String sKey) {
 		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-			B64Encryptor oEnc = new B64Encryptor();
+			C64 oEnc = new C64();
 			BufferedReader reader;
 			byte[] Output = new byte[BUFFER_SIZE];
 			reader = new BufferedReader(new FileReader(inputFile));
-			oEnc.setEncryption(sKey, B64Encryptor.S_ALPHABET_QWERTY);
+			oEnc.setEncryption(sKey, C64.S_ALPHABET_QWERTY);
 			String line = reader.readLine();
 			while (line != null) {
 				int iLen = line.length();
-				if (iLen <= B64Encryptor.I_LINE_MIME) {
+				if (iLen <= C64.I_LINE_MIME) {
 					int iEncodedBytes = oEnc.decrypt(line.getBytes(), iLen, Output);
 					bos.write(Output, 0, iEncodedBytes);
 				}
