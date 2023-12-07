@@ -147,6 +147,10 @@ class C64:
             pass
         return iOutputLen
 
+    def resetStates(self):
+        self.oEncState.init()
+        self.oDecState.init()
+
     def encrypt(self, iIn, iInLen, iOut, iLineMaxLen, bPadding):
         if not self.bInitialized:
             self.setEncryption(None, 0, None)

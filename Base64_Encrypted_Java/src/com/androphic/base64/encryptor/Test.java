@@ -98,6 +98,7 @@ public class Test extends C64{
 			iCryptKey[1] = (int) System.currentTimeMillis();
 			iCryptKey[2] = (int) System.currentTimeMillis();
 			o.setEncryption(iCryptKey, 3, S_ALPHABET_QWERTY);
+			o.resetStates();
 			for (int i1 = 0; i1 < iMsgSize; ++i1) {
 				sBufferDe[i1] = (byte) (i1 + i);
 			}

@@ -41,7 +41,7 @@ Kotlin
 - version 2
 
 Python
-- version 2
+- version 3
 
 Rust
 - version 1

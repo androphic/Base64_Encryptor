@@ -24,8 +24,9 @@ public class BinToC64App {
 	private static final int BUFFER_SIZE = 4096 * 3; // Must be File Cluster size * 3 for speed and no inter-padding
 
 	private static void encodeBase64(File inputFile, File outputFile, String sKey) {
-		try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(inputFile));
-				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+		try {
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(inputFile));
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
 			C64 oEnc = new C64();
 			byte[] Input = new byte[BUFFER_SIZE];
 			byte[] Output = new byte[BUFFER_SIZE * 3 / 2];
@@ -36,13 +37,16 @@ public class BinToC64App {
 				iEncodedBytes = oEnc.encrypt(Input, bytesRead, Output, C64.I_LINE_MIME, true);
 				bos.write(Output, 0, iEncodedBytes);
 			}
+			bis.close();
+			bos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private static void decodeBase64(File inputFile, File outputFile, String sKey) {
-		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+		try {
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
 			C64 oEnc = new C64();
 			BufferedReader reader;
 			byte[] Output = new byte[BUFFER_SIZE];
@@ -58,6 +62,7 @@ public class BinToC64App {
 				line = reader.readLine();
 			}
 			reader.close();
+			bos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

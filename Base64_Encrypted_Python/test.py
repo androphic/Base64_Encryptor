@@ -142,6 +142,7 @@ def main():
         iCryptKey[2] = int(time.time() * 1000)
 
         o.setEncryption(iCryptKey, 3, c64.C64.S_ALPHABET_QWERTY)
+        o.resetStates()
         sBufferDe[:iMsgSize] = [(i1 + i) & 0xFF for i1 in range(iMsgSize)]
 
         iLineLength = iCryptKey[1] & 0x3F

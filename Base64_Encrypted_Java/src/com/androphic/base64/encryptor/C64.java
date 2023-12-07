@@ -54,25 +54,6 @@ public class C64 {
 	private State oEncState = new State();
 	private State oDecState = new State();
 
-//	private int decodeB64Char(int ch) {
-//		//!!! Make it generic to support any Alphabet
-//		if ((ch > 64) && (ch < 91)) {
-//			return ch - 'A';
-//		} else if ((ch > 96) && (ch < 123)) {
-//			return (ch - 'a') + 26;
-//		} else if ((ch > 47) && (ch < 58)) {
-//			return ch + 4;
-//		} else if ((ch == '+') || (ch == '-')) {
-//			return 62;
-//		} else if ((ch == '/') || (ch == '_')) {
-//			return 63;
-//		} else if (ch == 61) {
-//			return 64;
-//		}
-//		return 255;
-//		//!!!
-//	}
-
 	protected int rotl16(int n, int c) {
 		n = n & 0xFFFF;
 		c &= 15;
@@ -117,6 +98,7 @@ public class C64 {
 		}
 	}
 
+	
 	private void initTables(String sAlphabet) {
 		bToGlue = false;
 		bInitialized = false;
@@ -197,6 +179,11 @@ public class C64 {
 		} else {
 		}
 		return iOutputLen;
+	}
+	
+	public void resetStates() {
+		oEncState.init();
+		oDecState.init();
 	}
 
 	public int encrypt(byte[] iIn, int iInLen, byte[] iOut, int iLineMaxLen, boolean bPadding) {
