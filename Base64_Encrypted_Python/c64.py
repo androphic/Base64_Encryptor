@@ -201,9 +201,9 @@ class C64:
         return k
 
     def decrypt(self, iIn, iInLen, iOut):
-        o = self.oDecState
         if not self.bInitialized:
             self.setEncryption(None, 0, None)
+        o = self.oDecState
         k = 0
         for i in range(iInLen):
             o.iBuf[o.iB] = self.iAlphabetIndex[iIn[i]]

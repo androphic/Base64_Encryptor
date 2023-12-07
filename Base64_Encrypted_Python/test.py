@@ -167,7 +167,6 @@ def main():
 
         iProgress = int(i * 100 / iExperiments)
         if iProgressPrev != iProgress:
-#            print(f"Progress: {iProgress}%, {sBufferEn.decode('utf-8').split('\0')[0]}")
             print(f"Progress: {iProgress}%")
             printArrayAsString(sBufferEn, iEncodedLen)
             iProgressPrev = iProgress
