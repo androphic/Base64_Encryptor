@@ -72,9 +72,9 @@ public class C64 {
 			iKey = rotl16(iKey, 1);
 			iDitherForKey = rotr16(iDitherForKey, 1);
 			int iSwitchIndex = i + (iKey ^ iDitherForKey) % (64 - i);
-			char iA = cAlphabet[i];
+			char c = cAlphabet[i];
 			cAlphabet[i] = cAlphabet[iSwitchIndex];
-			cAlphabet[iSwitchIndex] = iA;
+			cAlphabet[iSwitchIndex] = c;
 		}
 	}
 
@@ -102,8 +102,7 @@ public class C64 {
 	private void initTables(String sAlphabet) {
 		bToGlue = false;
 		bInitialized = false;
-		oEncState.init();
-		oDecState.init();
+		resetStates();
 		setAlphabet(sAlphabet);
 	}
 
