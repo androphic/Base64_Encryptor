@@ -11,34 +11,32 @@
 #ifndef C64_H_
 #define C64_H_
 
-#include <string.h>
-
 //TK: Be gentle with following alphabet strings!
-static unsigned char S_ALPHABET_STANDARD[] =
+static const unsigned char S_ALPHABET_STANDARD[] =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-static unsigned char S_ALPHABET_URL[] =
+static const unsigned char S_ALPHABET_URL[] =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=";
-static unsigned char S_ALPHABET_QWERTY[] =
+static const unsigned char S_ALPHABET_QWERTY[] =
 		"QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890-_=";
-static unsigned char S_ALPHABET_IMAP[] =
+static const unsigned char S_ALPHABET_IMAP[] =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+,=";
-static unsigned char S_ALPHABET_HQX[] =
+static const unsigned char S_ALPHABET_HQX[] =
 		"!\"#$%&'()*+,-012345689@ABCDEFGHIJKLMNPQRSTUVXYZ[`abcdefhijklmpqr=";
-static unsigned char S_ALPHABET_CRYPT[] =
+static const unsigned char S_ALPHABET_CRYPT[] =
 		"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz=";
-static unsigned char S_ALPHABET_GEDCOM[] =
+static const unsigned char S_ALPHABET_GEDCOM[] =
 		"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz=";
-static unsigned char S_ALPHABET_BCRYPT[] =
+static const unsigned char S_ALPHABET_BCRYPT[] =
 		"./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=";
-static unsigned char S_ALPHABET_XX[] =
+static const unsigned char S_ALPHABET_XX[] =
 		"+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz=";
-static unsigned char S_ALPHABET_BASH[] =
+static const unsigned char S_ALPHABET_BASH[] =
 		"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@_=";
 //.
 
-static int I_LINE_STANDARD = 0;
-static int I_LINE_MIME = 76;
-static int I_LINE_PEM = 64;
+static const int I_LINE_STANDARD = 0;
+static const int I_LINE_MIME = 76;
+static const int I_LINE_PEM = 64;
 
 static unsigned char cAlphabet[66] = { 0 };
 static unsigned char iAlphabetIndex[129] = { 0 };
@@ -56,6 +54,21 @@ struct State {
 
 struct State oEncState;
 struct State oDecState;
+
+/**************************************************************************/
+static inline unsigned int strLen(const unsigned char *s)
+/**************************************************************************/
+{
+	int iSize = 0;
+	for (int i = 0; i < 256; ++i) {
+		if (s[i] != 0) {
+			++iSize;
+		} else {
+			return iSize;
+		}
+	}
+	return 0;
+}
 
 /**************************************************************************/
 static inline unsigned int rotl16(unsigned int n, unsigned int c)
@@ -91,10 +104,10 @@ static inline void shuffleCodeTable(unsigned int iKey)
 }
 
 /**************************************************************************/
-static inline void setAlphabet(unsigned char *sNewAlphabet)
+static inline void setAlphabet(const unsigned char *sNewAlphabet)
 /**************************************************************************/
 {
-	if ((sNewAlphabet == 0) || (strlen((char*) sNewAlphabet) != 65)) {
+	if ((sNewAlphabet == 0) || (strLen(sNewAlphabet) != 65)) {
 		for (int i = 0; i < 65; ++i) {
 			cAlphabet[i] = S_ALPHABET_STANDARD[i];
 			return;
@@ -103,7 +116,6 @@ static inline void setAlphabet(unsigned char *sNewAlphabet)
 	for (int i = 0; i < 65; ++i) {
 		cAlphabet[i] = sNewAlphabet[i];
 	}
-//	printf("zzz table: %s\n", (char*)cAlphabet);
 	for (int i = 0; i < 128; ++i) {
 		iAlphabetIndex[i] = 0;
 	}
@@ -135,7 +147,7 @@ static inline void initState(struct State *oState)
 }
 
 /**************************************************************************/
-static inline void resetStates()
+static void resetStates()
 /**************************************************************************/
 {
 	initState(&oEncState);
@@ -143,7 +155,7 @@ static inline void resetStates()
 }
 
 /**************************************************************************/
-static inline void initTables(unsigned char *sNewAlphabet)
+static inline void initTables(const unsigned char *sNewAlphabet)
 /**************************************************************************/
 {
 	bToGlue = 0;
@@ -166,7 +178,7 @@ static inline void indexTables()
 
 /**************************************************************************/
 static void setEncryption(unsigned int *iKey, int iKeyLength,
-		unsigned char *sAlphabet)
+		const unsigned char *sAlphabet)
 /**************************************************************************/
 {
 	initTables(sAlphabet);
@@ -181,15 +193,18 @@ static void setEncryption(unsigned int *iKey, int iKeyLength,
 }
 
 /**************************************************************************/
-static void setEncryptionAsString(unsigned char *sKey, unsigned char *sAlphabet)
+static void setEncryptionAsString(unsigned char *sKey, const unsigned char *sAlphabet)
 /**************************************************************************/
 {
 	initTables(sAlphabet);
-	if (sKey != 0 && strlen((char*) sKey) > 0) {
-		for (int i = 0; i < strlen((char*) sKey); ++i) {
-			shuffleCodeTable((0 | sKey[i] << 8) | sKey[i]);
+	if (sKey != 0 > 0) {
+		int iLen = strLen(sKey);
+		if (iLen > 0) {
+			for (int i = 0; i < iLen; ++i) {
+				shuffleCodeTable((0 | sKey[i] << 8) | sKey[i]);
+			}
+			bToGlue = 1;
 		}
-		bToGlue = 1;
 	}
 	indexTables();
 	bInitialized = 1;
