@@ -4,13 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/Base64_Encrypted_CPP.cpp 
+../src/C64.cpp \
+../src/test_C64.cpp 
 
 CPP_DEPS += \
-./src/Base64_Encrypted_CPP.d 
+./src/C64.d \
+./src/test_C64.d 
 
 OBJS += \
-./src/Base64_Encrypted_CPP.o 
+./src/C64.o \
+./src/test_C64.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -25,7 +28,7 @@ src/%.o: ../src/%.cpp src/subdir.mk
 clean: clean-src
 
 clean-src:
-	-$(RM) ./src/Base64_Encrypted_CPP.d ./src/Base64_Encrypted_CPP.o
+	-$(RM) ./src/C64.d ./src/C64.o ./src/test_C64.d ./src/test_C64.o
 
 .PHONY: clean-src
 
