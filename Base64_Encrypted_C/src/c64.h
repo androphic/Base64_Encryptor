@@ -12,7 +12,6 @@
 #define C64_H_
 
 #include <string.h>
-#include <stdio.h>
 
 //TK: Be gentle with following alphabet strings!
 static unsigned char S_ALPHABET_STANDARD[] =
