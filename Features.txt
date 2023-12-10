@@ -29,7 +29,7 @@ C#
 - version 2
 
 Go 
-- version 2
+- version 3
 
 Java 
 - version 3
