@@ -10,7 +10,7 @@ Main Features:
 5. A "gluing" technique to better dissipate ciphertext and protect integrity.
 6. Padding mode ON/OFF
 7. Allow ciphertext to be split into any line length with MIME and PEM text widths as constants.
-8. Support for streaming and calling the function once for a full buffer. For accurate streaming and processing of internal states, use buffers that are a dividable on 3*4. For most File Systems ideal would be buffers block size multyplied by 3. For example (4096*3).
+8. Support for streaming and calling the function once for a full buffer. For accurate streaming and processing of internal states, use buffers that are a dividable on 3*4. For most File Systems ideal would be buffers block size multyplied by 3. For example (4096 * 3).
 9. Internal states for streaming and a reset() function to reset internal states.
 10. Using automatic alphabet indexing as an encoding and decoding method. There is no alphabet specific code.
 11. Functions for estimating the size of the encoded and decoded buffer. Note that it is not obvious to predict the exact size, since there are functions to enable/disable padding and line splitting. Use buffers extended by a small number of bytes to ensure sufficiency.
